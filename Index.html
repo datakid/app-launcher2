@@ -512,49 +512,45 @@ const apps = [
         title: 'خارجي قوي عاملة', 
         url: 'https://datakid-github-io.vercel.app/', 
         icon: 'fa-briefcase', 
-        gradient: ['#3b82f6', '#60a5fa', '#2563eb'],
+        gradient: ['#4A90E2', '#5A9DE2', '#3A83D2'],
         description: '',
-        stats: {}
+        closed: true
     },
     { 
         title: 'خارجي طلاب', 
         url: 'https://datakid2.vercel.app/', 
         icon: 'fa-graduation-cap', 
-        gradient: ['#10b981', '#34d399', '#059669'],
+        gradient: ['#50C878', '#60D488', '#40BC68'],
         description: '',
-        stats: {}
+        closed: true
     },
     { 
         title: 'مجموعات دوائية (سبتمبر)', 
         url: 'https://finalapp-nine.vercel.app/', 
         icon: 'fa-pills', 
-        gradient: ['#663399', '#8a2be2', '#663399'], 
+        gradient: ['#8E44AD', '#9E54BD', '#7E349D'], 
         description: '',
-        stats: {}
     },
     { 
         title: 'لستة الادوية', 
         url: 'https://searchbar-five-beta.vercel.app/', 
         icon: 'fa-search', 
-        gradient: ['#14B8A6', '#2DD4BF', '#0D9488'],
+        gradient: ['#20B2AA', '#30C2BA', '#10A29A'],
         description: '',
-        stats: {}
     },
     { 
         title: 'المنفذ والتحمل', 
         urls: ['https://newlist-eta.vercel.app/', 'https://newlist2.vercel.app/'],
         icon: 'fa-dollar-sign', 
-        gradient: ['#FF1493', '#FF69B4', '#FF4081'],
+        gradient: ['#E84393', '#F853A3', '#D83383'],
         description: '',
-        stats: {}
     },
     { 
         title: 'بروتوكولات الصرف', 
         url: 'https://protocols-one.vercel.app/', 
         icon: 'fa-book', 
-        gradient: ['#FF6F61', '#FF8A65', '#E57373'], 
+        gradient: ['#FF7F50', '#FF6347', '#FF8C69'], 
         description: '',
-        stats: {}
     }
 ];
 
@@ -601,18 +597,34 @@ const createAppCard = (app) => {
     const gradientColors = app.gradient.map(color => `${color}22`).join(', ');
     const buttonGradient = app.gradient.join(', ');
     
-    const isComingSoon = app.comingSoon;
-    const launchText = isComingSoon ? 'Coming Soon' : 'Launch';
-    const iconClass = isComingSoon ? 'fa-clock' : 'fa-external-link-alt';
+    let statusText, buttonText, iconClass;
+    if (app.closed) {
+        statusText = '';
+        buttonText = 'Closed';
+        iconClass = 'fa-lock';
+    } else if (app.comingSoon) {
+        statusText = '';
+        buttonText = 'Coming Soon';
+        iconClass = 'fa-clock';
+    } else {
+        statusText = '';
+        buttonText = 'Launch';
+        iconClass = 'fa-external-link-alt';
+    }
+    
+    const isDisabled = app.closed || app.comingSoon;
     
     card.innerHTML = `
         <div class="app-icon-wrapper" style="background: linear-gradient(135deg, ${buttonGradient})">
             <i class="app-icon fas ${app.icon}" aria-hidden="true"></i>
         </div>
         <h3 class="app-title" style="background: linear-gradient(135deg, ${buttonGradient}); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${app.title}</h3>
-        <a href="${app.url || '#'}" class="app-link" style="background: linear-gradient(135deg, ${buttonGradient})" ${isComingSoon ? 'aria-disabled="true" tabindex="-1"' : 'target="_blank" rel="noopener noreferrer"'} ${app.urls ? `data-multiple-urls='${JSON.stringify(app.urls)}'` : ''}>
-            ${launchText} <i class="fas ${iconClass}" aria-hidden="true"></i>
-            <span class="visually-hidden">${launchText} ${app.title}</span>
+        <div class="app-status">
+            <span class="status-text">${statusText}</span>
+        </div>
+        <a href="${app.url || '#'}" class="app-link" style="background: linear-gradient(135deg, ${buttonGradient})" ${isDisabled ? 'aria-disabled="true" tabindex="-1"' : 'target="_blank" rel="noopener noreferrer"'} ${app.urls ? `data-multiple-urls='${JSON.stringify(app.urls)}'` : ''}>
+            ${buttonText} <i class="fas ${iconClass}" aria-hidden="true"></i>
+            <span class="visually-hidden">${buttonText} ${app.title}</span>
         </a>
     `;
     card.style.background = `linear-gradient(135deg, ${gradientColors})`;
