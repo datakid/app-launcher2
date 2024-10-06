@@ -4,874 +4,1249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LinkExpress</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        :root {
+            --dark-bg: linear-gradient(45deg, #000000, #1a1a2e, #16213e);
+            --dark-card-bg: rgba(16, 20, 35, 0.8);
+            --dark-text: #00fff2;
+            --dark-border: rgba(0, 255, 242, 0.2);
+            --dark-shadow: rgba(0, 255, 242, 0.15);
+            --dark-glow: 0 0 25px rgba(0, 255, 242, 0.35);
+            
+            --light-bg: linear-gradient(45deg, #f0f0f0, #e0e0e0, #d0d0d0);
+            --light-card-bg: rgba(255, 255, 255, 0.95);
+            --light-text: #ff4d8d;
+            --light-border: rgba(255, 77, 141, 0.5);
+            --light-shadow: rgba(255, 77, 141, 0.3);
 
-:root {
-  --bg-dark: #0f1624;
-  --bg-light: #f0f4f8;
-  --text-dark: #e2e8f0;
-  --text-light: #1e293b;
-  --primary-color: #c0c0c0;
-  --secondary-color: #e5e4e2;
-  --accent-color: #a8a9ad;
-  --card-bg-dark: rgba(255,255,255,0.05);
-  --card-bg-light: rgba(255,255,255,0.9);
-  --transition-speed: 0.3s;
+            --matrix-bg: #000000;
+            --matrix-card-bg: rgba(0, 20, 0, 0.8);
+            --matrix-text: #00ff00;
+            --matrix-border: rgba(0, 255, 0, 0.2);
+            --matrix-shadow: rgba(0, 255, 0, 0.15);
+            --matrix-glow: 0 0 25px rgba(0, 255, 0, 0.35);
+
+            --steampunk-bg: #e0d8c8;
+            --steampunk-card-bg: #d4c8b8;
+            --steampunk-text: #5c3d2e;
+            --steampunk-accent: #b8860b;
+            --steampunk-shadow: rgba(92, 61, 46, 0.2);
+            --steampunk-border: rgba(184, 134, 11, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.5s ease;
+        }
+
+        body.light-mode {
+            background: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        body.matrix-mode {
+            background: var(--matrix-bg);
+            color: var(--matrix-text);
+        }
+
+        body.steampunk-mode {
+            background: var(--steampunk-bg);
+            color: var(--steampunk-text);
+        }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--dark-glow), 0 0 0 4px rgba(0, 255, 242, 0.1);
+        }
+
+        #theme-toggle:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        .light-mode #theme-toggle {
+            background: var(--light-card-bg);
+            color: var(--light-text);
+            box-shadow: 0 0 20px var(--light-shadow), 0 0 0 4px rgba(255, 77, 141, 0.1);
+        }
+
+        .matrix-mode #theme-toggle {
+            background: var(--matrix-card-bg);
+            color: var(--matrix-text);
+            box-shadow: var(--matrix-glow), 0 0 0 4px rgba(0, 255, 0, 0.1);
+        }
+
+        .steampunk-mode #theme-toggle {
+            background: var(--steampunk-card-bg);
+            color: var(--steampunk-accent);
+            box-shadow: 12px 12px 24px var(--steampunk-shadow), -12px -12px 24px #f0e8d8, inset 5px 5px 10px #c0b8a8, inset -5px -5px 10px #f0e8d8;
+            border: 2px solid var(--steampunk-border);
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 50px 20px;
+        }
+
+/* Base Title Styles */
+.title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
-  background-color: var(--bg-dark);
-  color: var(--text-dark);
-  overflow-x: hidden;
+/* Dark Mode - Futuristic Hologram */
+.dark-mode .title {
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+    animation: hologramFlicker 2s infinite;
 }
 
-.container {
-  width: 100%;
-  max-width: 1200px;
-  padding: 2rem;
-  position: relative;
-  z-index: 1;
+@keyframes hologramFlicker {
+    0%, 100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+    50% { opacity: 0.8; transform: scale(1.02); filter: blur(1px); }
 }
 
-h1 {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 3rem;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--primary-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  transition: transform var(--transition-speed) ease;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+.dark-mode .title::before,
+.dark-mode .title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
 }
 
-h1::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  width: 150px;
-  height: 4px;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--primary-color));
-  transform: translateX(-50%);
-  border-radius: 2px;
-  transition: width var(--transition-speed) ease, transform var(--transition-speed) ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.dark-mode .title::before {
+    color: #ff00ff;
+    animation: glitchTop 2s infinite;
 }
 
-h1:hover {
-  transform: scale(1.05);
+.dark-mode .title::after {
+    color: #00ffff;
+    animation: glitchBottom 2.1s infinite;
 }
 
-h1:hover::after {
-  width: 200px;
-  transform: translateX(-50%) scaleX(1.2);
+@keyframes glitchTop {
+    0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%); transform: translate(-0.04em, -0.03em); }
+    20% { clip-path: polygon(0 0, 100% 0, 100% 65%, 0 65%); transform: translate(0.05em, 0.06em); }
+    40% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); transform: translate(-0.06em, -0.02em); }
+    60% { clip-path: polygon(0 0, 100% 0, 100% 86%, 0 86%); transform: translate(0.03em, 0.05em); }
+    80% { clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%); transform: translate(-0.03em, -0.05em); }
 }
 
-.app-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2.5rem;
-  perspective: 1000px;
+@keyframes glitchBottom {
+    0%, 100% { clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%); transform: translate(0.04em, 0.03em); }
+    20% { clip-path: polygon(0 80%, 100% 80%, 100% 100%, 0 100%); transform: translate(-0.05em, -0.06em); }
+    40% { clip-path: polygon(0 95%, 100% 95%, 100% 100%, 0 100%); transform: translate(0.06em, 0.02em); }
+    60% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); transform: translate(-0.03em, -0.05em); }
+    80% { clip-path: polygon(0 85%, 100% 85%, 100% 100%, 0 100%); transform: translate(0.03em, 0.05em); }
 }
 
-.app-card {
-  background: linear-gradient(135deg, var(--card-bg-dark), rgba(255,255,255,0.1));
-  border-radius: 20px;
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 1px 8px rgba(0, 0, 0, 0.2);
-  transform-style: preserve-3d;
+/* Light Mode - Playful 3D Pop-out */
+.light-mode .title {
+    color: #ff6b6b;
+    text-shadow: 
+        2px 2px 0 #fff,
+        4px 4px 0 #000;
+    transform: rotate(-2deg);
+    animation: popOut 0.5s ease-out;
+    font-family: 'Bungee', cursive;
 }
 
-.app-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  transition: opacity 0.3s;
-  opacity: 0;
+@keyframes popOut {
+    0% { transform: scale(0) rotate(-5deg); }
+    80% { transform: scale(1.1) rotate(2deg); }
+    100% { transform: scale(1) rotate(-2deg); }
 }
 
-.app-card:hover::before {
-  opacity: 1;
-  animation: shimmer 1.5s infinite;
+.light-mode .title::before,
+.light-mode .title::after {
+    content: '★';
+    position: absolute;
+    top: 50%;
+    font-size: 36px;
+    color: #feca57;
+    animation: starTwinkle 1.5s ease-in-out infinite alternate;
 }
 
-.app-card:hover {
-  transform: translateY(-10px) scale(1.05) rotateX(5deg) rotateY(5deg);
-  box-shadow: 0 20px 40px rgba(0, 112, 209, 0.2), 0 15px 12px rgba(0, 112, 209, 0.1);
+.light-mode .title::before { left: -50px; transform: translateY(-50%) rotate(-15deg); }
+.light-mode .title::after { right: -50px; transform: translateY(-50%) rotate(15deg); }
+
+@keyframes starTwinkle {
+    0%, 100% { opacity: 1; transform: translateY(-50%) scale(1) rotate(-15deg); }
+    50% { opacity: 0.5; transform: translateY(-50%) scale(0.8) rotate(0deg); }
 }
 
-.app-icon-wrapper {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  transition: all var(--transition-speed) ease;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1), inset 0 4px 8px rgba(255,255,255,0.1);
+/* Matrix Mode - Improved Glitched Text */
+.matrix-mode .title {
+    color: #00ff00;
+    text-shadow: 2px 2px 0 #003300, -2px -2px 0 #006600;
+    font-family: 'Courier New', monospace;
+    position: relative;
+    letter-spacing: 2px;
 }
 
-.app-card:hover .app-icon-wrapper {
-  transform: scale(1.1) rotate(360deg);
+.matrix-mode .title::before,
+.matrix-mode .title::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-.app-icon-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  animation: shimmer 3s infinite;
+.matrix-mode .title::before {
+    left: 2px;
+    text-shadow: -1px 0 #00aa00;
+    clip-path: inset(10% 0 60% 0);
 }
 
-.app-icon {
-  font-size: 3.5rem;
-  color: var(--text-dark);
-  transition: all var(--transition-speed) ease;
-  z-index: 1;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+.matrix-mode .title::after {
+    left: -2px;
+    text-shadow: 1px 0 #00ff00;
+    clip-path: inset(60% 0 10% 0);
 }
 
-.app-title {
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--primary-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+/* Steampunk Mode - Interactive Mechanical */
+.steampunk-mode .title {
+    color: #8B4513;
+    background: linear-gradient(145deg, #e6d5c3, #c2b3a3);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 
+        8px 8px 16px #a99d8f,
+        -8px -8px 16px #fffbf5, 
+        inset 2px 2px 4px #a99d8f,
+        inset -2px -2px 4px #fffbf5;
+    text-shadow: 2px 2px 4px rgba(92, 61, 46, 0.3);
+    border: 2px solid #B8860B;
+    position: relative;
+    overflow: hidden;
+    font-family: 'UnifrakturMaguntia', cursive;
 }
 
-.app-link {
-  background: linear-gradient(135deg, var(--accent-color), var(--primary-color), var(--accent-color));
-  color: var(--bg-dark);
-  text-decoration: none;
-  padding: 1rem 2rem;
-  border-radius: 30px;
-  display: inline-flex;
-  align-items: center;
-  transition: all 0.3s ease;
-  font-size: 1.1rem;
-  font-weight: 500;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  box-shadow: 0 4px 6px rgba(192,192,192,0.1), 0 1px 3px rgba(192,192,192,0.1);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.steampunk-mode .title:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        12px 12px 20px #a99d8f,
+        -12px -12px 20px #fffbf5, 
+        inset 3px 3px 6px #a99d8f,
+        inset -3px -3px 6px #fffbf5;
 }
 
-.app-link::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(30deg);
-  transition: all 0.5s ease;
-  opacity: 0;
+.steampunk-mode .title::before,
+.steampunk-mode .title::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23B8860B' d='M50 0a50 50 0 100 100A50 50 0 0050 0zm0 8a42 42 0 110 84 42 42 0 010-84zm0 21a21 21 0 100 42 21 21 0 000-42z'/%3E%3C/svg%3E");
+    background-size: contain;
+    opacity: 0.1;
+    z-index: -1;
 }
 
-.app-link:hover {
-  color: var(--bg-dark);
-  transform: scale(1.1) rotate(3deg);
-  box-shadow: 0 10px 20px rgba(192, 192, 192, 0.3);
+.steampunk-mode .title::before {
+    top: -25px;
+    left: -25px;
+    animation: cogRotate 10s linear infinite;
 }
 
-.app-link:hover::before {
-  opacity: 1;
-  animation: button-wave 1s infinite linear;
+.steampunk-mode .title::after {
+    bottom: -25px;
+    right: -25px;
+    animation: cogRotate 15s linear infinite reverse;
 }
 
-.app-link:active {
-  transform: scale(0.95);
+@keyframes cogRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.app-link:focus {
-  outline: none;
-}
-
-@keyframes button-wave {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-.app-link i {
-  margin-left: 0.75rem;
-  font-size: 1rem;
-  transition: transform var(--transition-speed) ease;
-}
-
-.app-link:hover i {
-  transform: translateX(5px) rotate(-10deg);
-}
-
-.theme-toggle {
-  position: fixed;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  cursor: pointer;
-  z-index: 10;
-  color: var(--text-dark);
-  transition: all var(--transition-speed) ease;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-  outline: none;
-}
-
-.theme-toggle:hover {
-  transform: rotate(180deg) scale(1.1);
-}
-
-.theme-toggle:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.theme-toggle:focus-visible {
-  transform: scale(1.1);
-}
-
-body.light-theme {
-  background-color: var(--bg-light);
-  color: var(--text-light);
-}
-
-body.light-theme .app-card {
-  background: linear-gradient(135deg, var(--card-bg-light), rgba(255,255,255,0.9));
-  border: 1px solid rgba(0,0,0,0.1);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 8px rgba(0, 0, 0, 0.1);
-}
-
-body.light-theme .app-card::before {
-  background: linear-gradient(
-    to right,
-    rgba(200, 200, 200, 0) 0%,
-    rgba(200, 200, 200, 0.8) 50%,
-    rgba(200, 200, 200, 0) 100%
-  );
-}
-
-body.light-theme .app-link::before {
-  background: linear-gradient(
-    to right,
-    rgba(200, 200, 200, 0) 0%,
-    rgba(200, 200, 200, 0.7) 50%,
-    rgba(200, 200, 200, 0) 100%
-  );
-}
-
-body.light-theme .app-icon {
-  color: var(--text-light);
-}
-
-body.light-theme .theme-toggle {
-  color: var(--text-light);
-}
-
-body.light-theme .app-title {
-  background: linear-gradient(to right, var(--accent-color), var(--primary-color), var(--accent-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-body.light-theme .app-link {
-  background: linear-gradient(135deg, var(--accent-color), var(--primary-color), var(--accent-color));
-  color: var(--bg-light);
-}
-
-body.light-theme .app-link:hover {
-  color: var(--bg-light);
-}
-
-body.light-theme h1 {
-  background: linear-gradient(to right, var(--accent-color), var(--text-light), var(--accent-color));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-@keyframes shimmer-button {
-  0% {
-    transform: translateX(-100%) rotate(30deg);
-  }
-  100% {
-    transform: translateX(100%) rotate(30deg);
-  }
-}
-
-.app-card {
-  animation: fadeInUp 0.6s ease-out forwards, pulse 2s infinite;
-  opacity: 0;
-}
-
-.app-card:nth-child(1) { animation-delay: 0.1s; }
-.app-card:nth-child(2) { animation-delay: 0.2s; }
-.app-card:nth-child(3) { animation-delay: 0.3s; }
-
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .container {
-    padding: 1.5rem;
-  }
-
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .app-grid {
-    grid-template-columns: 1fr;
-  }
+    .title {
+        font-size: 36px;
+        padding: 15px;
+    }
+    
+    .light-mode .title::before,
+    .light-mode .title::after {
+        font-size: 24px;
+    }
+    
+    .light-mode .title::before { left: -30px; }
+    .light-mode .title::after { right: -30px; }
+    
+    .steampunk-mode .title::before,
+    .steampunk-mode .title::after {
+        width: 60px;
+        height: 60px;
+    }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+        .hub {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            width: 100%;
+        }
 
-#particles-js {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
+        .app {
+            aspect-ratio: 1 / 1;
+            background: var(--dark-card-bg);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--dark-border);
+            box-shadow: 0 8px 32px 0 var(--dark-shadow);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+        }
 
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0,0);
-  white-space: nowrap;
-  border: 0;
-}
+        .app::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 255, 242, 0.05),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: cyberscan 4s linear infinite;
+            transition: all 0.5s ease;
+        }
 
-.app-card {
-  will-change: transform;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .app-card {
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), filter 0.3s ease, opacity 0.3s ease;
-  }
-}
+        .app:hover::after {
+            opacity: 0.8;
+            animation-duration: 2s;
+        }
 
-.app-card.highlighted {
-  box-shadow: 0 0 30px rgba(192, 192, 192, 0.3);
-  z-index: 2;
-}
+        @keyframes cyberscan {
+            0% {
+                transform: translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateY(100%) rotate(45deg);
+            }
+        }
 
-.app-card.dehighlighted {
-  filter: blur(2px) grayscale(50%);
-  transform: scale(0.85);
-  opacity: 0.6;
-}
+        .light-mode .app {
+            background: var(--light-card-bg);
+            border: 4px solid var(--light-border);
+            box-shadow: 
+                8px 8px 0 rgba(255, 77, 141, 0.5),
+                16px 16px 0 rgba(255, 77, 141, 0.3);
+        }
 
-.sound-toggle {
-  position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  cursor: pointer;
-  z-index: 10;
-  color: var(--text-dark);
-  transition: all var(--transition-speed) ease;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-  outline: none;
-}
+        .matrix-mode .app {
+            background: var(--matrix-card-bg);
+            border: 2px solid var(--matrix-border);
+            box-shadow: var(--matrix-glow);
+        }
 
-.sound-toggle:hover {
-  transform: scale(1.1);
-}
+        .steampunk-mode .app {
+            background: var(--steampunk-card-bg);
+            border: none;
+            border-radius: 30px;
+            box-shadow: 
+                20px 20px 60px var(--steampunk-shadow),
+                -20px -20px 60px #f0e8d8, 
+                inset 10px 10px 20px #c0b8a8,
+                inset -10px -10px 20px #f0e8d8;
+        }
 
-body.light-theme .sound-toggle {
-  color: var(--text-light);
-}
+        .light-mode .app::after,
+        .matrix-mode .app::after {
+            display: none;
+        }
+
+        .steampunk-mode .app::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            background: linear-gradient(45deg, #d4c8b8, #e0d8c8);
+            border-radius: 25px;
+            z-index: -1;
+        }
+
+        .app:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 
+                0 15px 40px 0 var(--dark-shadow),
+                0 0 25px var(--dark-text);
+        }
+
+        .light-mode .app:hover {
+            transform: translateY(-15px) scale(1.1);
+            box-shadow: 
+                12px 12px 0 rgba(255, 77, 141, 0.5),
+                24px 24px 0 rgba(255, 77, 141, 0.3);
+        }
+
+        .matrix-mode .app:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 
+                0 15px 40px 0 var(--matrix-shadow),
+                0 0 25px var(--matrix-text);
+        }
+
+        .steampunk-mode .app:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 
+                30px 30px 80px var(--steampunk-shadow),
+                -30px -30px 80px #f0e8d8, 
+                inset 15px 15px 30px #c0b8a8,
+                inset -15px -15px 30px #f0e8d8;
+        }
+
+        .app-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .app:hover .app-icon {
+            transform: scale(1.2) rotate(360deg);
+            text-shadow: 0 0 15px var(--dark-text);
+        }
+
+        .light-mode .app:hover .app-icon {
+            text-shadow: 0 0 15px var(--light-text);
+        }
+
+        .matrix-mode .app:hover .app-icon {
+            text-shadow: 0 0 15px var(--matrix-text);
+        }
+
+        .steampunk-mode .app:hover .app-icon {
+            text-shadow: 2px 2px 4px var(--steampunk-shadow);
+            color: var(--steampunk-accent);
+        }
+
+        .app-name {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .light-mode .app-name {
+            color: var(--light-text);
+            font-weight: bold;
+            text-shadow: 3px 3px 0 rgba(255, 77, 141, 0.3);
+        }
+
+        .matrix-mode .app-name {
+            color: var(--matrix-text);
+            font-weight: bold;
+            text-shadow: 3px 3px 0 rgba(0, 255, 0, 0.3);
+        }
+
+        .steampunk-mode .app-name {
+            color: var(--steampunk-text);
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(92, 61, 46, 0.3);
+        }
+
+        .steampunk-mode .app::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 2px solid var(--steampunk-border);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .hub {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hub {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Enhanced Steampunk Neomorphic Effects */
+        .steampunk-mode .app {
+            background: 
+                linear-gradient(145deg, #e6ddd0, #c2b8a8);
+            box-shadow: 
+                20px 20px 60px #b1a796,
+                -20px -20px 60px #f7ebda,
+                inset 5px 5px 10px #c2b8a8,
+                inset -5px -5px 10px #e6ddd0;
+        }
+
+        .steampunk-mode .app:hover {
+            background: 
+                linear-gradient(145deg, #c2b8a8, #e6ddd0);
+            box-shadow: 
+                25px 25px 75px #a19687,
+                -25px -25px 75px #fffbe9,
+                inset 10px 10px 20px #b1a796,
+                inset -10px -10px 20px #f7ebda;
+        }
+
+        .steampunk-mode .app-icon {
+            color: var(--steampunk-accent);
+            text-shadow: 2px 2px 4px rgba(92, 61,46, 0.3);
+        }
+
+        .steampunk-mode .app-name {
+            background: -webkit-linear-gradient(var(--steampunk-text), var(--steampunk-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .steampunk-mode #theme-toggle::before {
+            content: '⚙️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+        }
+
+        .steampunk-mode #theme-toggle:hover::before {
+            animation: gear-spin 2s linear infinite;
+        }
+
+        @keyframes gear-spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-        <i class="fas fa-sun" aria-hidden="true"></i>
-        <span class="visually-hidden">Toggle theme</span>
+    <button id="theme-toggle">
+        <i class="fas fa-moon"></i>
     </button>
-    <button id="soundToggle" class="sound-toggle" aria-label="Toggle sound">
-        <i class="fas fa-volume-up" aria-hidden="true"></i>
-        <span class="visually-hidden">Toggle sound</span>
-    </button>
+    <canvas id="bg-canvas"></canvas>
     <div class="container">
-        <h1>LinkExpress</h1>
-        <div class="app-grid" id="appGrid"></div>
+        <h1 class="title">LinkExpress</h1>
+        <div class="hub">
+            <a href="https://datakid-github-io.vercel.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-briefcase-medical"></i>
+                </div>
+                <div class="app-name">خارجي قوي عاملة</div>
+            </a>
+            <a href="https://datakid2.vercel.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="app-name">خارجي طلاب</div>
+            </a>
+            <a href="https://finalapp-nine.vercel.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <div class="app-name">مجموعات دوائية</div>
+            </a>
+            <a href="https://searchbar-five-beta.vercel.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="app-name">لستة الادوية</div>
+            </a>
+            <div class="app" id="dual-link-1">
+                <div class="app-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="app-name">المنفذ والتحمل</div>
+            </div>
+            <a href="https://protocols-one.vercel.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-folder-open"></i>
+                </div>
+                <div class="app-name">بروتوكولات التأمين</div>
+            </a>
+            <a href="https://simpledashboard21.netlify.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="app-name">بيانات الخارجي</div>
+            </a>
+            <a href="https://app-launcher-omega.vercel.app/" class="app" target="_blank" rel="noopener noreferrer">
+                <div class="app-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <div class="app-name">---</div>
+            </a>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-    
-const apps = [
-    { 
-        title: 'خارجي قوي عاملة', 
-        url: 'https://datakid-github-io.vercel.app/', 
-        icon: 'fa-briefcase', 
-        gradient: ['#4A90E2', '#5A9DE2', '#3A83D2'],
-        description: '',
-        closed: true
-    },
-    { 
-        title: 'خارجي طلاب', 
-        url: 'https://datakid2.vercel.app/', 
-        icon: 'fa-graduation-cap', 
-        gradient: ['#50C878', '#60D488', '#40BC68'],
-        description: '',
-        closed: true
-    },
-    { 
-        title: 'مجموعات دوائية (سبتمبر)', 
-        url: 'https://finalapp-nine.vercel.app/', 
-        icon: 'fa-pills', 
-        gradient: ['#8E44AD', '#9E54BD', '#7E349D'], 
-        description: '',
-    },
-    { 
-        title: 'لستة الادوية', 
-        url: 'https://searchbar-five-beta.vercel.app/', 
-        icon: 'fa-search', 
-        gradient: ['#20B2AA', '#30C2BA', '#10A29A'],
-        description: '',
-    },
-    { 
-        title: 'المنفذ والتحمل', 
-        urls: ['https://newlist-eta.vercel.app/', 'https://newlist2.vercel.app/'],
-        icon: 'fa-dollar-sign', 
-        gradient: ['#E84393', '#F853A3', '#D83383'],
-        description: '',
-    },
-    { 
-        title: 'بروتوكولات الصرف', 
-        url: 'https://protocols-one.vercel.app/', 
-        icon: 'fa-book', 
-        gradient: ['#FF7F50', '#FF6347', '#FF8C69'], 
-        description: '',
-    }
-];
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ 
+    canvas: document.getElementById('bg-canvas'), 
+    alpha: true,
+    antialias: true 
+});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
 
-const sounds = {
-    hover: new Audio('https://datakid.github.io/mp3/hover.mp3'),
-    click: new Audio('https://datakid.github.io/mp3/click.wav'),
-    themeToggle: new Audio('https://datakid.github.io/mp3/toggle.wav'),
-    cardHighlight: new Audio(''),
-    ambient: new Audio('https://datakid.github.io/mp3/ambient.wav')
+const darkGeometry = new THREE.TorusKnotGeometry(10, 3, 128, 24);
+const lightGeometry = new THREE.DodecahedronGeometry(10, 1);
+const matrixGeometry = new THREE.BoxGeometry(10, 10, 10, 10, 10, 10);
 
+const darkMaterial = new THREE.MeshBasicMaterial({ 
+    color: 0x00fff2,                     
+    wireframe: true,                     
+    wireframeLinewidth: 3.0,             
+    transparent: true,                   
+    opacity: 0.35,                       
+    emissive: 0x00fff2,                  
+    emissiveIntensity: 0.6,              
+    depthWrite: false,                   
+    depthTest: true,                     
+    side: THREE.DoubleSide,              
+    alphaTest: 0.05,                     
+    polygonOffset: true,                 
+    polygonOffsetFactor: 1.0,            
+    polygonOffsetUnits: 1.0,             
+    alpha: 0.5                           
+});
+
+
+const lightMaterial = new THREE.MeshBasicMaterial({ 
+    color: 0xff4d8d,                     
+    wireframe: true,                     
+    wireframeLinewidth: 3.0,             
+    transparent: true,                   
+    opacity: 0.4,                        
+    emissive: 0xff4d8d,                  
+    emissiveIntensity: 0.5,              
+    depthWrite: false,                   
+    depthTest: true,                     
+    side: THREE.DoubleSide,              
+    alphaTest: 0.1,                      
+    polygonOffset: true,                 
+    polygonOffsetFactor: 1.0,            
+    polygonOffsetUnits: 1.0               
+});
+
+
+const matrixMaterial = new THREE.MeshBasicMaterial({ 
+    color: 0x00ff00,                     
+    wireframe: true,                     
+    wireframeLinewidth: 3.0,             
+    transparent: true,                   
+    opacity: 0.3,                        
+    emissive: 0x00ff00,                  
+    emissiveIntensity: 0.5,              
+    depthWrite: false,                   
+    depthTest: true,                     
+    side: THREE.DoubleSide,              
+    alphaTest: 0.1,                      
+    polygonOffset: true,                 
+    polygonOffsetFactor: 1.0,            
+    polygonOffsetUnits: 1.0               
+});
+
+
+let currentMesh = new THREE.Mesh(darkGeometry, darkMaterial);
+scene.add(currentMesh);
+
+camera.position.z = 30;
+
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('i');
+let currentTheme = 'dark';
+
+const themes = ['dark', 'light', 'matrix', 'steampunk'];
+const themeIcons = {
+    'dark': 'fa-moon',
+    'light': 'fa-sun',
+    'matrix': 'fa-terminal',
+    'steampunk': 'fa-cogs'
 };
 
-Object.values(sounds).forEach(sound => {
-    sound.load();
-    if (sound === sounds.ambient) {
-        sound.loop = true;
-        sound.volume = 0.2; 
-    } else {
-        sound.volume = 0.6; 
+let steampunkObjects = [];
+
+themeToggle.addEventListener('click', () => {
+    const currentIndex = themes.indexOf(currentTheme);
+    const nextIndex = (currentIndex + 1) % themes.length;
+    currentTheme = themes[nextIndex];
+
+    document.body.className = currentTheme !== 'dark' ? `${currentTheme}-mode` : '';
+    
+    themeIcon.className = `fas ${themeIcons[currentTheme]}`;
+    
+    while(scene.children.length > 0){ 
+        scene.remove(scene.children[0]); 
+    }
+
+    switch(currentTheme) {
+        case 'light':
+            currentMesh = new THREE.Mesh(lightGeometry, lightMaterial);
+            scene.add(currentMesh);
+            break;
+        case 'matrix':
+            currentMesh = new THREE.Mesh(matrixGeometry, matrixMaterial);
+            scene.add(currentMesh);
+            break;
+        case 'steampunk':
+            createSteampunkScene();
+            break;
+        default:
+            currentMesh = new THREE.Mesh(darkGeometry, darkMaterial);
+            scene.add(currentMesh);
     }
 });
 
-let soundEnabled = true;
+const dualLink1 = document.getElementById('dual-link-1');
+const urls1 = ['https://newlist2.vercel.app/', 'https://newlist-eta.vercel.app/'];
 
-const playSound = (sound) => {
-    if (soundEnabled && sound !== sounds.ambient) {
-        sound.currentTime = 0;
-        sound.play().catch(e => console.error("Error playing sound:", e));
+dualLink1.addEventListener('click', () => {
+    const randomUrl = urls1[Math.floor(Math.random() * urls1.length)];
+    window.open(randomUrl, '_blank');
+});
+
+function createMatrixRain() {
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.zIndex = '-1';
+    canvas.style.opacity = '0.15';
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const nums = '0123456789';
+    const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    const alphabet = katakana + latin + nums + symbols;
+
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+
+    const rainDrops = [];
+
+    for (let x = 0; x < columns; x++) {
+        rainDrops[x] = 1;
     }
-};
 
-const toggleAmbientSound = () => {
-    if (soundEnabled) {
-        sounds.ambient.play().catch(e => console.error("Error playing ambient sound:", e));
-    } else {
-        sounds.ambient.pause();
-    }
-};
+    const colors = ['#0F0', '#00FF00', '#32CD32', '#98FB98'];
 
-const createAppCard = (app) => {
-    const card = document.createElement('div');
-    card.className = 'app-card';
-    
-    const gradientColors = app.gradient.map(color => `${color}22`).join(', ');
-    const buttonGradient = app.gradient.join(', ');
-    
-    let statusText, buttonText, iconClass;
-    if (app.closed) {
-        statusText = '';
-        buttonText = 'Closed';
-        iconClass = 'fa-lock';
-    } else if (app.comingSoon) {
-        statusText = '';
-        buttonText = 'Coming Soon';
-        iconClass = 'fa-clock';
-    } else {
-        statusText = '';
-        buttonText = 'Launch';
-        iconClass = 'fa-external-link-alt';
-    }
-    
-    const isDisabled = app.closed || app.comingSoon;
-    
-    card.innerHTML = `
-        <div class="app-icon-wrapper" style="background: linear-gradient(135deg, ${buttonGradient})">
-            <i class="app-icon fas ${app.icon}" aria-hidden="true"></i>
-        </div>
-        <h3 class="app-title" style="background: linear-gradient(135deg, ${buttonGradient}); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${app.title}</h3>
-        <div class="app-status">
-            <span class="status-text">${statusText}</span>
-        </div>
-        <a href="${app.url || '#'}" class="app-link" style="background: linear-gradient(135deg, ${buttonGradient})" ${isDisabled ? 'aria-disabled="true" tabindex="-1"' : 'target="_blank" rel="noopener noreferrer"'} ${app.urls ? `data-multiple-urls='${JSON.stringify(app.urls)}'` : ''}>
-            ${buttonText} <i class="fas ${iconClass}" aria-hidden="true"></i>
-            <span class="visually-hidden">${buttonText} ${app.title}</span>
-        </a>
-    `;
-    card.style.background = `linear-gradient(135deg, ${gradientColors})`;
-    
-    return card;
-};
+    function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-const renderApps = () => {
-    const appGrid = document.getElementById('appGrid');
-    const fragment = document.createDocumentFragment();
-    apps.forEach(app => {
-        fragment.appendChild(createAppCard(app));
-    });
-    appGrid.appendChild(fragment);
-};
+        for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+            ctx.font = `${fontSize}px monospace`;
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
 
-const highlightCard = (card) => {
-    playSound(sounds.cardHighlight);
-    document.querySelectorAll('.app-card').forEach(c => {
-        c.classList.toggle('highlighted', c === card);
-        c.classList.toggle('dehighlighted', c !== card);
-    });
-};
-
-const removeHighlight = () => {
-    document.querySelectorAll('.app-card').forEach(c => {
-        c.classList.remove('highlighted', 'dehighlighted');
-    });
-};
-
-const toggleTheme = () => {
-    playSound(sounds.themeToggle);
-    const body = document.body;
-    const themeToggle = document.getElementById('themeToggle');
-    
-    body.classList.toggle('light-theme');
-    
-    const isLightTheme = body.classList.contains('light-theme');
-    themeToggle.innerHTML = isLightTheme
-        ? '<i class="fas fa-moon" aria-hidden="true"></i><span class="visually-hidden">Switch to dark mode</span>'
-        : '<i class="fas fa-sun" aria-hidden="true"></i><span class="visually-hidden">Switch to light mode</span>';
-    themeToggle.setAttribute('aria-label', `Switch to ${isLightTheme ? 'dark' : 'light'} mode`);
-    
-    updateParticlesConfig(isLightTheme);
-};
-
-const updateParticlesConfig = (isLightMode) => {
-    const particlesConfig = {
-        particles: {
-            number: { value: window.innerWidth < 768 ? 60 : 80, density: { enable: true, value_area: 800 } },
-            color: { value: isLightMode ? '#1e293b' : '#e2e8f0' },
-            shape: { 
-                type: isLightMode ? ['star', 'circle', 'triangle', 'polygon'] : ['circle', 'triangle', 'polygon', 'star'],
-                stroke: { width: 0, color: '#000000' },
-                polygon: { nb_sides: 5 },
-                image: { src: 'img/github.svg', width: 100, height: 100 }
-            },
-            opacity: { 
-                value: 0.5, 
-                random: true, 
-                anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } 
-            },
-            size: { 
-                value: 3, 
-                random: true, 
-                anim: { enable: true, speed: 2, size_min: 0.1, sync: false } 
-            },
-            line_linked: { 
-                enable: true, 
-                distance: 150, 
-                color: isLightMode ? '#1e293b' : '#e2e8f0', 
-                opacity: 0.4, 
-                width: 1 
-            },
-            move: { 
-                enable: true, 
-                speed: isLightMode ? 4 : 2, 
-                direction: isLightMode ? 'bottom' : 'none', 
-                random: false, 
-                straight: false, 
-                out_mode: 'out', 
-                bounce: false,
-                attract: { enable: true, rotateX: 600, rotateY: 1200 }
+            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                rainDrops[i] = 0;
             }
-        },
-        interactivity: {
-            detect_on: 'canvas',
-            events: { 
-                onhover: { enable: true, mode: 'repulse' }, 
-                onclick: { enable: true, mode: 'push' }, 
-                resize: true 
-            },
-            modes: { 
-                repulse: { distance: 100, duration: 0.4 }, 
-                push: { particles_nb: 4 }
+            rainDrops[i]++;
+        }
+
+        // Add occasional bright streaks
+        if (Math.random() > 0.95) {
+            ctx.fillStyle = '#FFFFFF';
+            const streakColumn = Math.floor(Math.random() * columns);
+            for (let j = 0; j < 5; j++) {
+                const streakChar = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(streakChar, streakColumn * fontSize, (rainDrops[streakColumn] + j) * fontSize);
             }
-        },
-        retina_detect: true
-    };
-
-    if (isLightMode) {
-        particlesConfig.particles.move.gravity = {
-            enable: true,
-            acceleration: 2
-        };
+        }
     }
 
-    if (window.pJSDom && window.pJSDom[0].pJS) {
-        window.pJSDom[0].pJS.fn.vendors.destroypJS();
-        window.pJSDom = [];
+    return setInterval(draw, 30);
+}
+
+let matrixInterval;
+
+function toggleMatrixRain() {
+    if (currentTheme === 'matrix') {
+        matrixInterval = createMatrixRain();
+    } else if (matrixInterval) {
+        clearInterval(matrixInterval);
+        const canvas = document.querySelector('canvas:not(#bg-canvas)');
+        if (canvas) {
+            canvas.remove();
+        }
     }
-    particlesJS('particles-js', particlesConfig);
-};
+}
 
-const toggleSound = () => {
-    soundEnabled = !soundEnabled;
-    const soundToggle = document.getElementById('soundToggle');
-    soundToggle.innerHTML = soundEnabled
-        ? '<i class="fas fa-volume-up" aria-hidden="true"></i><span class="visually-hidden">Mute sound</span>'
-        : '<i class="fas fa-volume-mute" aria-hidden="true"></i><span class="visually-hidden">Unmute sound</span>';
-    soundToggle.setAttribute('aria-label', soundEnabled ? 'Mute sound' : 'Unmute sound');
-    toggleAmbientSound();
-};
+themeToggle.addEventListener('click', toggleMatrixRain);
 
-const debounce = (func, wait) => {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
+
+function createGearShape(outerRadius, innerRadius, teeth, toothDepth) {
+    const shape = new THREE.Shape();
+    const PI2 = Math.PI * 2;
+
+    shape.moveTo(outerRadius, 0);
+    for (let i = 0; i < teeth; i++) {
+        const angle = (i / teeth) * PI2;
+        const nextAngle = ((i + 1) / teeth) * PI2;
+
+        shape.lineTo(
+            Math.cos(angle) * outerRadius,
+            Math.sin(angle) * outerRadius
+        );
+        shape.lineTo(
+            Math.cos(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle) * outerRadius,
+            Math.sin(nextAngle) * outerRadius
+        );
+    }
+    shape.lineTo(outerRadius, 0);
+
+    const holePath = new THREE.Path();
+    holePath.absarc(0, 0, innerRadius, 0, PI2, true);
+    shape.holes.push(holePath);
+
+    return shape;
+}
+
+function createGearShape(outerRadius, innerRadius, teeth, toothDepth) {
+    const shape = new THREE.Shape();
+    const PI2 = Math.PI * 2;
+
+    shape.moveTo(outerRadius, 0);
+    for (let i = 0; i < teeth; i++) {
+        const angle = (i / teeth) * PI2;
+        const nextAngle = ((i + 1) / teeth) * PI2;
+
+        shape.lineTo(
+            Math.cos(angle) * outerRadius,
+            Math.sin(angle) * outerRadius
+        );
+        shape.lineTo(
+            Math.cos(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle) * outerRadius,
+            Math.sin(nextAngle) * outerRadius
+        );
+    }
+    shape.lineTo(outerRadius, 0);
+
+    const holePath = new THREE.Path();
+    holePath.absarc(0, 0, innerRadius, 0, PI2, true);
+    shape.holes.push(holePath);
+
+    return shape;
+}
+
+function createGearShape(outerRadius, innerRadius, teeth, toothDepth) {
+    const shape = new THREE.Shape();
+    const PI2 = Math.PI * 2;
+
+    shape.moveTo(outerRadius, 0);
+    for (let i = 0; i < teeth; i++) {
+        const angle = (i / teeth) * PI2;
+        const nextAngle = ((i + 1) / teeth) * PI2;
+
+        shape.lineTo(
+            Math.cos(angle) * outerRadius,
+            Math.sin(angle) * outerRadius
+        );
+        shape.lineTo(
+            Math.cos(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle) * outerRadius,
+            Math.sin(nextAngle) * outerRadius
+        );
+    }
+    shape.lineTo(outerRadius, 0);
+
+    const holePath = new THREE.Path();
+    holePath.absarc(0, 0, innerRadius, 0, PI2, true);
+    shape.holes.push(holePath);
+
+    return shape;
+}
+
+function createGearShape(outerRadius, innerRadius, teeth, toothDepth) {
+    const shape = new THREE.Shape();
+    const PI2 = Math.PI * 2;
+
+    shape.moveTo(outerRadius, 0);
+    for (let i = 0; i < teeth; i++) {
+        const angle = (i / teeth) * PI2;
+        const nextAngle = ((i + 1) / teeth) * PI2;
+
+        shape.lineTo(
+            Math.cos(angle) * outerRadius,
+            Math.sin(angle) * outerRadius
+        );
+        shape.lineTo(
+            Math.cos(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth),
+            Math.sin(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth)
+        );
+        shape.lineTo(
+            Math.cos(nextAngle) * outerRadius,
+            Math.sin(nextAngle) * outerRadius
+        );
+    }
+    shape.lineTo(outerRadius, 0);
+
+    const holePath = new THREE.Path();
+    holePath.absarc(0, 0, innerRadius, 0, PI2, true);
+    shape.holes.push(holePath);
+
+    return shape;
+}
+
+function createSteampunkScene() {
+    // Adjusted scale factor for better screen fit
+    const scaleFactor = 1.5 ;
+    
+    // Optimized gear configurations with 8 essential gears
+    const gearConfigs = [
+        // Main center gear (seconds)
+        { radius: 5 * scaleFactor, teeth: 60, position: { x: 0, y: 0, z: 0 }, color: 0xb8860b, depth: 2.5 },
+        
+        // Minutes gear train (2 gears)
+        { radius: 3.5 * scaleFactor, teeth: 45, position: { x: 9, y: 0, z: 1.2 }, color: 0xcd853f, depth: 2.2 },
+        { radius: 2.8 * scaleFactor, teeth: 30, position: { x: 9, y: 7, z: 1.8 }, color: 0xdaa520, depth: 2.0 },
+        
+        // Hours gear train (2 gears)
+        { radius: 4 * scaleFactor, teeth: 48, position: { x: -8, y: 0, z: 0.8 }, color: 0xd2691e, depth: 2.3 },
+        { radius: 3 * scaleFactor, teeth: 36, position: { x: -8, y: 7.5, z: 1.5 }, color: 0x8b4513, depth: 2.1 },
+        
+        // Escapement mechanism (2 gears)
+        { radius: 3.2 * scaleFactor, teeth: 32, position: { x: 0, y: 9, z: 2.0 }, color: 0xffd700, depth: 1.9 },
+        { radius: 2.5 * scaleFactor, teeth: 24, position: { x: 4, y: 9, z: 2.4 }, color: 0xb87333, depth: 1.8 },
+        
+        // Balance wheel (1 gear)
+        { radius: 3.8 * scaleFactor, teeth: 40, position: { x: -5, y: -7, z: 1.6 }, color: 0xc0c0c0, depth: 2.4 }
+    ];
+
+    const gearMaterial = new THREE.MeshStandardMaterial({ 
+        metalness: 0.85,
+        roughness: 0.2,
+        envMapIntensity: 1.2,
+        flatShading: false,
+        transparent: true,
+        opacity: 0.4
+    });
+
+    const gears = [];
+
+    // Create each gear with enhanced 3D depth
+    gearConfigs.forEach((config, index) => {
+        const gearShape = createGearShape(
+            config.radius,
+            config.radius * 0.35,
+            config.teeth,
+            config.radius * 0.2
+        );
+
+        const extrudeSettings = {
+            depth: config.depth,
+            bevelEnabled: true,
+            bevelThickness: 0.4,
+            bevelSize: 0.3,
+            bevelSegments: 8
         };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-};
 
-const debouncedPlayHoverSound = debounce(() => playSound(sounds.hover), 100);
+        const gearGeometry = new THREE.ExtrudeGeometry(gearShape, extrudeSettings);
+        const material = gearMaterial.clone();
+        material.color.setHex(config.color);
+        
+        const gear = new THREE.Mesh(gearGeometry, material);
+        gear.position.set(
+            config.position.x,
+            config.position.y,
+            config.position.z
+        );
 
-const handleResize = debounce(() => {
-    if (!window.pJSDom || !window.pJSDom[0] || !window.pJSDom[0].pJS) return;
-    
-    const pJS = window.pJSDom[0].pJS;
-    pJS.particles.number.value = window.innerWidth < 768 ? 60 : 80;
-    pJS.fn.particlesRefresh();
-}, 250);
+        // Enhanced center hub
+        const centerHub = new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                config.radius * 0.3,
+                config.radius * 0.3, 
+                config.depth + 0.6,
+                24
+            ),
+            new THREE.MeshStandardMaterial({ 
+                color: 0x8b4513,
+                metalness: 0.95,
+                roughness: 0.05
+            })
+        );
+        centerHub.position.z = config.depth/2;
+        gear.add(centerHub);
 
-const particlesConfig = {
-    particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: '#e2e8f0' },
-        shape: { 
-            type: ['circle', 'triangle', 'polygon', 'star'],
-            stroke: { width: 0, color: '#000000' },
-            polygon: { nb_sides: 5 },
-            image: { src: 'img/github.svg', width: 100, height: 100 }
-        },
-        opacity: { 
-            value: 0.5, 
-            random: true, 
-            anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } 
-        },
-        size: { 
-            value: 3, 
-            random: true, 
-            anim: { enable: true, speed: 2, size_min: 0.1, sync: false } 
-        },
-        line_linked: { 
-            enable: true, 
-            distance: 150, 
-            color: '#e2e8f0', 
-            opacity: 0.4, 
-            width: 1 
-        },
-        move: { 
-            enable: true, 
-            speed: 2, 
-            direction: 'none', 
-            random: false, 
-            straight: false, 
-            out_mode: 'out', 
-            bounce: false,
-            attract: { enable: true, rotateX: 600, rotateY: 1200 }
+        // Add clock hands to main gear
+        if (index === 0) {
+            // Hour hand
+            const hourHand = new THREE.Mesh(
+                new THREE.BoxGeometry(0.4, 4 * scaleFactor, 0.3),
+                new THREE.MeshStandardMaterial({ 
+                    color: 0x000000,
+                    metalness: 0.7,
+                    roughness: 0.3
+                })
+            );
+            hourHand.position.z = config.depth + 0.4;
+            gear.add(hourHand);
+            
+            // Minute hand
+            const minuteHand = new THREE.Mesh(
+                new THREE.BoxGeometry(0.3, 5 * scaleFactor, 0.3),
+                new THREE.MeshStandardMaterial({ 
+                    color: 0x000000,
+                    metalness: 0.7,
+                    roughness: 0.3
+                })
+            );
+            minuteHand.position.z = config.depth + 0.8;
+            gear.add(minuteHand);
         }
-    },
-    interactivity: {
-        detect_on: 'canvas',
-        events: { 
-            onhover: { enable: true, mode: 'repulse' }, 
-            onclick: { enable: true, mode: 'push' }, 
-            resize: true 
-        },
-        modes: { 
-            repulse: { distance: 100, duration: 0.4 }, 
-            push: { particles_nb: 4 }
-        }
-    },
-    retina_detect: true
-};
 
-document.addEventListener('DOMContentLoaded', () => {
-    renderApps();
+        gears.push(gear);
+        scene.add(gear);
+        steampunkObjects.push(gear);
+    });
+
+    // Create connecting rods between related gears
+    function createConnectingRod(start, end) {
+        const startPoint = new THREE.Vector3(
+            start.position.x,
+            start.position.y,
+            start.position.z + start.geometry.parameters.depth/2
+        );
+        const endPoint = new THREE.Vector3(
+            end.position.x,
+            end.position.y,
+            end.position.z + end.geometry.parameters.depth/2
+        );
+        
+        const distance = startPoint.distanceTo(endPoint);
+        const rodGeometry = new THREE.CylinderGeometry(
+            0.3 * scaleFactor,
+            0.3 * scaleFactor, 
+            distance, 
+            16
+        );
+        const rodMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x8B4513, 
+            metalness: 0.8, 
+            roughness: 0.2 
+        });
+        const rod = new THREE.Mesh(rodGeometry, rodMaterial);
+        
+        const midpoint = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
+        rod.position.copy(midpoint);
+        rod.lookAt(endPoint);
+        rod.rotateX(Math.PI / 2);
+        
+        scene.add(rod);
+        steampunkObjects.push(rod);
+    }
+
+    // Connect related gear pairs
+    createConnectingRod(gears[1], gears[2]); // Minutes train
+    createConnectingRod(gears[3], gears[4]); // Hours train
+    createConnectingRod(gears[5], gears[6]); // Escapement mechanism
+
+    // Animation function
+    function animateClock() {
+        const baseSpeed = 0.01;
+        
+        // Main gear (seconds)
+        gears[0].rotation.z += baseSpeed;
+        
+        // Minutes train
+        gears[1].rotation.z -= baseSpeed * (gears[0].geometry.parameters.radius / gears[1].geometry.parameters.radius);
+        gears[2].rotation.z += baseSpeed * (gears[1].geometry.parameters.radius / gears[2].geometry.parameters.radius);
+        
+        // Hours train
+        gears[3].rotation.z -= baseSpeed * (gears[0].geometry.parameters.radius / gears[3].geometry.parameters.radius);
+        gears[4].rotation.z += baseSpeed * (gears[3].geometry.parameters.radius / gears[4].geometry.parameters.radius);
+        
+        // Escapement
+        gears[5].rotation.z -= baseSpeed * 1.5;
+        gears[6].rotation.z += baseSpeed * 2;
+        
+        // Balance wheel
+        gears[7].rotation.z = Math.sin(Date.now() * 0.005) * 0.2;
+    }
+
+    // Optimized lighting setup
+    const mainLight = new THREE.SpotLight(0xffd700, 1.0);
+    mainLight.position.set(20, 20, 25);
+    mainLight.angle = Math.PI / 3;
+    mainLight.penumbra = 0.2;
+    mainLight.decay = 1.5;
+    mainLight.distance = 100;
+    scene.add(mainLight);
+    steampunkObjects.push(mainLight);
+
+    const backLight = new THREE.SpotLight(0x6495ed, 0.6);
+    backLight.position.set(-15, -15, 15);
+    backLight.angle = Math.PI / 4;
+    backLight.penumbra = 0.3;
+    backLight.decay = 1.5;
+    backLight.distance = 100;
+    scene.add(backLight);
+    steampunkObjects.push(backLight);
+
+    const rimLight = new THREE.SpotLight(0xffffff, 0.4);
+    rimLight.position.set(0, 0, 20);
+    rimLight.angle = Math.PI / 3;
+    rimLight.penumbra = 0.4;
+    rimLight.decay = 1.5;
+    rimLight.distance = 100;
+    scene.add(rimLight);
+    steampunkObjects.push(rimLight);
+
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
+    scene.add(ambientLight);
+    steampunkObjects.push(ambientLight);
+
+    return animateClock;
+}
+
+let steampunkAnimate;
+
+function animate() {
+    requestAnimationFrame(animate);
     
-    const themeToggle = document.getElementById('themeToggle');
-    const soundToggle = document.getElementById('soundToggle');
-    const appGrid = document.getElementById('appGrid');
-    
-    themeToggle.addEventListener('click', toggleTheme);
-    soundToggle.addEventListener('click', toggleSound);
-    
-appGrid.addEventListener('click', (e) => {
-    const link = e.target.closest('.app-link');
-    if (link && !link.getAttribute('aria-disabled')) {
-        playSound(sounds.click);
-        if (link.getAttribute('data-multiple-urls')) {
-            e.preventDefault();
-            const urls = JSON.parse(link.getAttribute('data-multiple-urls'));
-            const randomUrl = urls[Math.floor(Math.random() * urls.length)];
-            window.open(randomUrl, '_blank', 'noopener,noreferrer');
-        }
+    if (currentTheme !== 'steampunk') {
+        currentMesh.rotation.x += 0.002;
+        currentMesh.rotation.y += 0.001;
+        
+        currentMesh.position.y = Math.sin(Date.now() * 0.001) * 0.8;
+        currentMesh.position.x = Math.cos(Date.now() * 0.0005) * 0.5;
+    } else if (steampunkAnimate) {
+        steampunkAnimate();
+    }
+
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    if (currentTheme === 'matrix') {
+        clearInterval(matrixInterval);
+        matrixInterval = createMatrixRain();
     }
 });
-    
-    let currentHighlightedCard = null;
-    
-    appGrid.addEventListener('mouseover', (e) => {
-        const card = e.target.closest('.app-card');
-        if (card && card !== currentHighlightedCard) {
-            highlightCard(card);
-            debouncedPlayHoverSound();
-            currentHighlightedCard = card;
-        }
-    });
-    
-    appGrid.addEventListener('mouseout', (e) => {
-        if (!e.relatedTarget || !e.relatedTarget.closest('.app-card')) {
-            removeHighlight();
-            currentHighlightedCard = null;
-        }
-    });
-    
-    window.addEventListener('resize', handleResize);
-    
-    if (window.particlesJS) {
-        window.particlesJS('particles-js', particlesConfig);
-    }
 
-    toggleAmbientSound();
+themeToggle.addEventListener('click', () => {
+    if (currentTheme === 'steampunk') {
+        steampunkAnimate = createSteampunkScene();
+    } else {
+        steampunkAnimate = null;
+        // Remove all steampunk objects when switching to other themes
+        steampunkObjects.forEach(obj => scene.remove(obj));
+        steampunkObjects = [];
+    }
 });
     </script>
 </body>
