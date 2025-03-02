@@ -7,146 +7,171 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --dark-bg: linear-gradient(45deg, #000000, #1a1a2e, #16213e);
-            --dark-card-bg: rgba(16, 20, 35, 0.8);
-            --dark-text: #00fff2;
-            --dark-border: rgba(0, 255, 242, 0.2);
-            --dark-shadow: rgba(0, 255, 242, 0.15);
-            --dark-glow: 0 0 25px rgba(0, 255, 242, 0.35);
-            
-            --light-bg: linear-gradient(45deg, #f0f0f0, #e0e0e0, #d0d0d0);
-            --light-card-bg: rgba(255, 255, 255, 0.95);
-            --light-text: #ff4d8d;
-            --light-border: rgba(255, 77, 141, 0.5);
-            --light-shadow: rgba(255, 77, 141, 0.3);
+:root {
+    /* Dark Theme - More subtle gradients with refined accents */
+    --dark-bg: linear-gradient(135deg, #000000, #0a0c20, #141833, #0a0a18);
+    --dark-card-bg: rgba(12, 18, 36, 0.75);
+    --dark-text: #00fff2;
+    --dark-border: rgba(0, 255, 242, 0.2);
+    --dark-shadow: rgba(0, 255, 242, 0.15);
+    --dark-glow: 0 0 20px rgba(0, 255, 242, 0.25);
+    
+    /* Light Theme - Sophisticated pastels with subtle premium accents */
+    --light-bg: linear-gradient(135deg, #f5f5f7, #e8e8f0, #d8d8e8, #f0f0f8);
+    --light-card-bg: rgba(255, 255, 255, 0.92);
+    --light-text: #ff3a7c;
+    --light-border: rgba(255, 58, 124, 0.4);
+    --light-shadow: rgba(255, 58, 124, 0.25);
+    --light-glow: 0 0 20px rgba(255, 58, 124, 0.25);
+    
+    /* Matrix Theme - Deeper blacks and more subtle green accents */
+    --matrix-bg: linear-gradient(to right, #000000, #001200, #000800, #000000);
+    --matrix-card-bg: rgba(0, 12, 0, 0.75);
+    --matrix-text: #00ff41;
+    --matrix-border: rgba(0, 255, 65, 0.2);
+    --matrix-shadow: rgba(0, 255, 65, 0.15);
+    --matrix-glow: 0 0 20px rgba(0, 255, 65, 0.25);
+    
+    /* Steampunk Theme - Sleeker metallics and more professional finish */
+    --steampunk-bg: linear-gradient(to right, #e9e4d8, #dcd3c6, #e9e4d8);
+    --steampunk-card-bg: linear-gradient(145deg, #e6ddd0, #d1c2b0);
+    --steampunk-text: #472f1c;
+    --steampunk-accent: #b28136;
+    --steampunk-shadow: rgba(71, 47, 28, 0.15);
+    --steampunk-border: rgba(178, 129, 54, 0.45);
+    --steampunk-highlight: #f2eada;
+    --steampunk-lowlight: #c0b09c;
+}
 
-            --matrix-bg: #000000;
-            --matrix-card-bg: rgba(0, 20, 0, 0.8);
-            --matrix-text: #00ff00;
-            --matrix-border: rgba(0, 255, 0, 0.2);
-            --matrix-shadow: rgba(0, 255, 0, 0.15);
-            --matrix-glow: 0 0 25px rgba(0, 255, 0, 0.35);
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-            --steampunk-bg: #e0d8c8;
-            --steampunk-card-bg: #d4c8b8;
-            --steampunk-text: #5c3d2e;
-            --steampunk-accent: #b8860b;
-            --steampunk-shadow: rgba(92, 61, 46, 0.2);
-            --steampunk-border: rgba(184, 134, 11, 0.5);
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    background-attachment: fixed;
+    background-size: 300% 300%;
+    animation: gradientMove 25s ease infinite;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@keyframes gradientMove {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--dark-bg);
-            color: var(--dark-text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            transition: all 0.5s ease;
-        }
+body.light-mode {
+    background: var(--light-bg);
+    color: var(--light-text);
+}
 
-        body.light-mode {
-            background: var(--light-bg);
-            color: var(--light-text);
-        }
+body.matrix-mode {
+    background: var(--matrix-bg);
+    color: var(--matrix-text);
+}
 
-        body.matrix-mode {
-            background: var(--matrix-bg);
-            color: var(--matrix-text);
-        }
+body.steampunk-mode {
+    background: var(--steampunk-bg);
+    color: var(--steampunk-text);
+}
 
-        body.steampunk-mode {
-            background: var(--steampunk-bg);
-            color: var(--steampunk-text);
-        }
+#theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--dark-text);
+    backdrop-filter: blur(15px);
+    box-shadow: var(--dark-glow), 0 0 0 2px rgba(0, 255, 242, 0.1);
+    overflow: hidden;
+}
 
-        #theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 24px;
-            transition: all 0.4s ease;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--dark-text);
-            backdrop-filter: blur(10px);
-            box-shadow: var(--dark-glow), 0 0 0 4px rgba(0, 255, 242, 0.1);
-        }
+#theme-toggle:hover {
+    transform: rotate(180deg) scale(1.1);
+}
 
-        #theme-toggle:hover {
-            transform: rotate(180deg) scale(1.1);
-        }
+.light-mode #theme-toggle {
+    background: var(--light-card-bg);
+    color: var(--light-text);
+    box-shadow: var(--light-glow), 0 0 0 2px rgba(255, 58, 124, 0.1);
+}
 
-        .light-mode #theme-toggle {
-            background: var(--light-card-bg);
-            color: var(--light-text);
-            box-shadow: 0 0 20px var(--light-shadow), 0 0 0 4px rgba(255, 77, 141, 0.1);
-        }
+.matrix-mode #theme-toggle {
+    background: var(--matrix-card-bg);
+    color: var(--matrix-text);
+    box-shadow: var(--matrix-glow), 0 0 0 2px rgba(0, 255, 65, 0.1);
+}
 
-        .matrix-mode #theme-toggle {
-            background: var(--matrix-card-bg);
-            color: var(--matrix-text);
-            box-shadow: var(--matrix-glow), 0 0 0 4px rgba(0, 255, 0, 0.1);
-        }
+.steampunk-mode #theme-toggle {
+    background: var(--steampunk-card-bg);
+    color: var(--steampunk-accent);
+    box-shadow: 
+        6px 6px 12px var(--steampunk-shadow),
+        -6px -6px 12px var(--steampunk-highlight),
+        inset 2px 2px 4px var(--steampunk-lowlight),
+        inset -2px -2px 4px var(--steampunk-highlight);
+    border: 1px solid var(--steampunk-border);
+}
 
-        .steampunk-mode #theme-toggle {
-            background: var(--steampunk-card-bg);
-            color: var(--steampunk-accent);
-            box-shadow: 12px 12px 24px var(--steampunk-shadow), -12px -12px 24px #f0e8d8, inset 5px 5px 10px #c0b8a8, inset -5px -5px 10px #f0e8d8;
-            border: 2px solid var(--steampunk-border);
-        }
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.5;
+}
 
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            opacity: 0.6;
-        }
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 60px 30px;
+}
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 50px 20px;
-        }
-
-/* Base Title Styles */
+/* Refined Title Styles */
 .title {
     font-size: 48px;
-    font-weight: 700;
-    margin-bottom: 40px;
+    font-weight: 800;
+    margin-bottom: 50px;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 4px;
     position: relative;
     z-index: 2;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* Dark Mode - Futuristic Hologram */
+/* Dark Mode - Refined Futuristic Hologram */
 .dark-mode .title {
     color: #00ffff;
-    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
-    animation: hologramFlicker 2s infinite;
+    text-shadow: 
+        0 0 8px #00ffff, 
+        0 0 16px #00ffff;
+    animation: hologramFlicker 4s infinite;
+    font-family: 'Rajdhani', sans-serif;
 }
 
 @keyframes hologramFlicker {
     0%, 100% { opacity: 1; transform: scale(1); filter: blur(0px); }
-    50% { opacity: 0.8; transform: scale(1.02); filter: blur(1px); }
+    33% { opacity: 0.95; transform: scale(1.005); filter: blur(0.2px); }
+    66% { opacity: 0.92; transform: scale(1.01); filter: blur(0.5px); }
 }
 
 .dark-mode .title::before,
@@ -158,49 +183,50 @@
     right: 0;
     bottom: 0;
     z-index: -1;
+    opacity: 0.5;
 }
 
 .dark-mode .title::before {
     color: #ff00ff;
-    animation: glitchTop 2s infinite;
+    animation: glitchTop 3.5s infinite;
 }
 
 .dark-mode .title::after {
     color: #00ffff;
-    animation: glitchBottom 2.1s infinite;
+    animation: glitchBottom 3.7s infinite;
 }
 
 @keyframes glitchTop {
-    0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%); transform: translate(-0.04em, -0.03em); }
-    20% { clip-path: polygon(0 0, 100% 0, 100% 65%, 0 65%); transform: translate(0.05em, 0.06em); }
-    40% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); transform: translate(-0.06em, -0.02em); }
-    60% { clip-path: polygon(0 0, 100% 0, 100% 86%, 0 86%); transform: translate(0.03em, 0.05em); }
-    80% { clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%); transform: translate(-0.03em, -0.05em); }
+    0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%); transform: translate(-0.03em, -0.015em); }
+    20% { clip-path: polygon(0 0, 100% 0, 100% 65%, 0 65%); transform: translate(0.03em, 0.03em); }
+    40% { clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%); transform: translate(-0.03em, -0.02em); }
+    60% { clip-path: polygon(0 0, 100% 0, 100% 86%, 0 86%); transform: translate(0.02em, 0.03em); }
+    80% { clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%); transform: translate(-0.02em, -0.02em); }
 }
 
 @keyframes glitchBottom {
-    0%, 100% { clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%); transform: translate(0.04em, 0.03em); }
-    20% { clip-path: polygon(0 80%, 100% 80%, 100% 100%, 0 100%); transform: translate(-0.05em, -0.06em); }
-    40% { clip-path: polygon(0 95%, 100% 95%, 100% 100%, 0 100%); transform: translate(0.06em, 0.02em); }
-    60% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); transform: translate(-0.03em, -0.05em); }
-    80% { clip-path: polygon(0 85%, 100% 85%, 100% 100%, 0 100%); transform: translate(0.03em, 0.05em); }
+    0%, 100% { clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%); transform: translate(0.03em, 0.015em); }
+    20% { clip-path: polygon(0 80%, 100% 80%, 100% 100%, 0 100%); transform: translate(-0.03em, -0.03em); }
+    40% { clip-path: polygon(0 95%, 100% 95%, 100% 100%, 0 100%); transform: translate(0.03em, 0.02em); }
+    60% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); transform: translate(-0.02em, -0.03em); }
+    80% { clip-path: polygon(0 85%, 100% 85%, 100% 100%, 0 100%); transform: translate(0.02em, 0.02em); }
 }
 
-/* Light Mode - Playful 3D Pop-out */
+/* Light Mode - Refined 3D Pop-out */
 .light-mode .title {
-    color: #ff6b6b;
+    color: #ff3a7c;
     text-shadow: 
         2px 2px 0 #fff,
-        4px 4px 0 #000;
-    transform: rotate(-2deg);
-    animation: popOut 0.5s ease-out;
-    font-family: 'Bungee', cursive;
+        4px 4px 0 rgba(0, 0, 0, 0.15);
+    transform: rotate(-1deg);
+    animation: popOut 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-family: 'Bungee', 'Segoe UI', sans-serif;
 }
 
 @keyframes popOut {
-    0% { transform: scale(0) rotate(-5deg); }
-    80% { transform: scale(1.1) rotate(2deg); }
-    100% { transform: scale(1) rotate(-2deg); }
+    0% { transform: scale(0) rotate(-3deg); }
+    70% { transform: scale(1.1) rotate(2deg); }
+    100% { transform: scale(1) rotate(-1deg); }
 }
 
 .light-mode .title::before,
@@ -209,25 +235,28 @@
     position: absolute;
     top: 50%;
     font-size: 36px;
-    color: #feca57;
-    animation: starTwinkle 1.5s ease-in-out infinite alternate;
+    color: #ffcc00;
+    filter: drop-shadow(0 0 3px rgba(255, 204, 0, 0.5));
+    animation: starTwinkle 3s ease-in-out infinite alternate;
 }
 
 .light-mode .title::before { left: -50px; transform: translateY(-50%) rotate(-15deg); }
 .light-mode .title::after { right: -50px; transform: translateY(-50%) rotate(15deg); }
 
 @keyframes starTwinkle {
-    0%, 100% { opacity: 1; transform: translateY(-50%) scale(1) rotate(-15deg); }
-    50% { opacity: 0.5; transform: translateY(-50%) scale(0.8) rotate(0deg); }
+    0%, 100% { opacity: 0.8; transform: translateY(-50%) scale(1) rotate(-15deg); }
+    50% { opacity: 0.6; transform: translateY(-50%) scale(0.9) rotate(0deg); }
 }
 
-/* Matrix Mode - Improved Glitched Text */
+/* Matrix Mode - Refined Digital Rain Effect */
 .matrix-mode .title {
-    color: #00ff00;
-    text-shadow: 2px 2px 0 #003300, -2px -2px 0 #006600;
+    color: #00ff41;
+    text-shadow: 
+        0 0 4px #00ff41,
+        0 0 8px #00ff41;
     font-family: 'Courier New', monospace;
     position: relative;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
 }
 
 .matrix-mode .title::before,
@@ -238,45 +267,57 @@
     left: 0;
     width: 100%;
     height: 100%;
+    animation: matrixGlitch 4s infinite;
+    opacity: 0.5;
 }
 
 .matrix-mode .title::before {
-    left: 2px;
+    left: 1px;
     text-shadow: -1px 0 #00aa00;
     clip-path: inset(10% 0 60% 0);
+    animation-delay: -0.5s;
 }
 
 .matrix-mode .title::after {
-    left: -2px;
-    text-shadow: 1px 0 #00ff00;
+    left: -1px;
+    text-shadow: 1px 0 #00ff41;
     clip-path: inset(60% 0 10% 0);
+    animation-delay: -1s;
 }
 
-/* Steampunk Mode - Interactive Mechanical */
+@keyframes matrixGlitch {
+    0%, 100% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+}
+
+/* Steampunk Mode - Sleek Victorian Industrial Elegance */
 .steampunk-mode .title {
-    color: #8B4513;
-    background: linear-gradient(145deg, #e6d5c3, #c2b3a3);
+    color: #472f1c;
+    background: linear-gradient(145deg, #e9e2d8, #d1c5b8);
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 10px;
     box-shadow: 
-        8px 8px 16px #a99d8f,
-        -8px -8px 16px #fffbf5, 
-        inset 2px 2px 4px #a99d8f,
-        inset -2px -2px 4px #fffbf5;
-    text-shadow: 2px 2px 4px rgba(92, 61, 46, 0.3);
-    border: 2px solid #B8860B;
+        8px 8px 16px var(--steampunk-shadow),
+        -8px -8px 16px var(--steampunk-highlight), 
+        inset 2px 2px 4px var(--steampunk-lowlight),
+        inset -2px -2px 4px var(--steampunk-highlight);
+    text-shadow: 1px 1px 2px rgba(71, 47, 28, 0.25);
+    border: 2px solid var(--steampunk-border);
     position: relative;
     overflow: hidden;
-    font-family: 'UnifrakturMaguntia', cursive;
+    font-family: 'UnifrakturMaguntia', 'Times New Roman', serif;
 }
 
 .steampunk-mode .title:hover {
     transform: translateY(-5px);
     box-shadow: 
-        12px 12px 20px #a99d8f,
-        -12px -12px 20px #fffbf5, 
-        inset 3px 3px 6px #a99d8f,
-        inset -3px -3px 6px #fffbf5;
+        10px 10px 20px var(--steampunk-shadow),
+        -10px -10px 20px var(--steampunk-highlight), 
+        inset 2px 2px 4px var(--steampunk-lowlight),
+        inset -2px -2px 4px var(--steampunk-highlight);
 }
 
 .steampunk-mode .title::before,
@@ -285,22 +326,22 @@
     position: absolute;
     width: 100px;
     height: 100px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23B8860B' d='M50 0a50 50 0 100 100A50 50 0 0050 0zm0 8a42 42 0 110 84 42 42 0 010-84zm0 21a21 21 0 100 42 21 21 0 000-42z'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23B28136' d='M50 0a50 50 0 100 100A50 50 0 0050 0zm0 8a42 42 0 110 84 42 42 0 010-84zm0 21a21 21 0 100 42 21 21 0 000-42z'/%3E%3C/svg%3E");
     background-size: contain;
     opacity: 0.1;
     z-index: -1;
 }
 
 .steampunk-mode .title::before {
-    top: -25px;
-    left: -25px;
-    animation: cogRotate 10s linear infinite;
+    top: -30px;
+    left: -30px;
+    animation: cogRotate 20s linear infinite;
 }
 
 .steampunk-mode .title::after {
-    bottom: -25px;
-    right: -25px;
-    animation: cogRotate 15s linear infinite reverse;
+    bottom: -30px;
+    right: -30px;
+    animation: cogRotate 25s linear infinite reverse;
 }
 
 @keyframes cogRotate {
@@ -308,288 +349,436 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
+/* Refined Hub Grid Layout */
+.hub {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 50px;
+    max-width: 1600px;
+    width: 100%;
+}
+
+/* Refined App Cards */
+.app {
+    aspect-ratio: 1 / 1;
+    background: var(--dark-card-bg);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--dark-border);
+    box-shadow: 0 8px 30px 0 var(--dark-shadow);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Refined Cyberscan Animation */
+.app::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(0, 255, 242, 0.04),
+        transparent
+    );
+    transform: rotate(45deg);
+    animation: cyberscan 8s linear infinite;
+    transition: all 0.6s ease;
+}
+
+.app:hover::after {
+    opacity: 0.7;
+    animation-duration: 4s;
+}
+
+@keyframes cyberscan {
+    0% {
+        transform: translateY(-110%) rotate(45deg);
+    }
+    100% {
+        transform: translateY(110%) rotate(45deg);
+    }
+}
+
+/* Light Mode App Card Refinements */
+.light-mode .app {
+    background: var(--light-card-bg);
+    border: 3px solid var(--light-border);
+    box-shadow: 
+        8px 8px 0 rgba(255, 58, 124, 0.3),
+        16px 16px 0 rgba(255, 58, 124, 0.15);
+}
+
+.light-mode .app::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0) 75%
+    );
+    opacity: 0;
+    transition: all 0.6s ease;
+}
+
+.light-mode .app:hover::before {
+    opacity: 0.3;
+}
+
+/* Matrix Mode App Card Refinements */
+.matrix-mode .app {
+    background: var(--matrix-card-bg);
+    border: 1px solid var(--matrix-border);
+    box-shadow: var(--matrix-glow);
+    position: relative;
+    overflow: hidden;
+}
+
+.matrix-mode .app::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    background: 
+        linear-gradient(90deg, 
+            rgba(0, 255, 65, 0) 0%,
+            rgba(0, 255, 65, 0.05) 45%,
+            rgba(0, 255, 65, 0.05) 55%,
+            rgba(0, 255, 65, 0) 100%);
+    animation: matrixScan 5s linear infinite;
+    z-index: 1;
+}
+
+@keyframes matrixScan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* Steampunk Mode App Card Refinements */
+.steampunk-mode .app {
+    background: var(--steampunk-card-bg);
+    border: none;
+    border-radius: 20px;
+    box-shadow: 
+        16px 16px 32px var(--steampunk-shadow),
+        -16px -16px 32px var(--steampunk-highlight), 
+        inset 6px 6px 12px var(--steampunk-lowlight),
+        inset -6px -6px 12px var(--steampunk-highlight);
+    position: relative;
+}
+
+.steampunk-mode .app::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    background: linear-gradient(145deg, #dcd0c0, #e6ded0);
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+/* Refined Hover Effects */
+.app:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 
+        0 16px 40px 0 var(--dark-shadow),
+        0 0 20px var(--dark-text);
+}
+
+.light-mode .app:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 
+        12px 12px 0 rgba(255, 58, 124, 0.3),
+        24px 24px 0 rgba(255, 58, 124, 0.15);
+}
+
+.matrix-mode .app:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 
+        0 16px 40px 0 var(--matrix-shadow),
+        0 0 20px var(--matrix-text);
+}
+
+.steampunk-mode .app:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 
+        20px 20px 40px var(--steampunk-shadow),
+        -20px -20px 40px var(--steampunk-highlight), 
+        inset 8px 8px 16px var(--steampunk-lowlight),
+        inset -8px -8px 16px var(--steampunk-highlight);
+}
+
+/* Refined App Icons */
+.app-icon {
+    font-size: 64px;
+    margin-bottom: 25px;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 2;
+}
+
+.dark-mode .app-icon {
+    filter: drop-shadow(0 0 5px var(--dark-text));
+}
+
+.light-mode .app-icon {
+    filter: drop-shadow(0 0 5px var(--light-text));
+}
+
+.matrix-mode .app-icon {
+    filter: drop-shadow(0 0 5px var(--matrix-text));
+}
+
+.steampunk-mode .app-icon {
+    filter: drop-shadow(2px 2px 4px var(--steampunk-shadow));
+    color: var(--steampunk-accent);
+}
+
+.app:hover .app-icon {
+    transform: scale(1.15) rotate(360deg);
+}
+
+.dark-mode .app:hover .app-icon {
+    text-shadow: 0 0 12px var(--dark-text);
+}
+
+.light-mode .app:hover .app-icon {
+    text-shadow: 0 0 12px var(--light-text);
+}
+
+.matrix-mode .app:hover .app-icon {
+    text-shadow: 0 0 12px var(--matrix-text);
+}
+
+.steampunk-mode .app:hover .app-icon {
+    text-shadow: 2px 2px 4px var(--steampunk-shadow);
+}
+
+/* Refined App Labels */
+.app-name {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 2;
+    padding: 0 15px;
+}
+
+.dark-mode .app-name {
+    background: linear-gradient(to right, #00ffff, #00fff2, #00ffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 242, 0.3));
+}
+
+.light-mode .app-name {
+    color: var(--light-text);
+    font-weight: 800;
+    text-shadow: 2px 2px 0 rgba(255, 58, 124, 0.2);
+}
+
+.matrix-mode .app-name {
+    background: linear-gradient(to right, #00ff41, #00aa00, #00ff41);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 65, 0.3));
+}
+
+.steampunk-mode .app-name {
+    background: linear-gradient(var(--steampunk-text), var(--steampunk-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(1px 1px 2px rgba(71, 47, 28, 0.25));
+}
+
+.steampunk-mode .app::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 2px solid var(--steampunk-border);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Refined Steampunk Theme Toggle */
+.steampunk-mode #theme-toggle::before {
+    content: '⚙️';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 30px;
+}
+
+.steampunk-mode #theme-toggle:hover::before {
+    animation: gear-spin 4s linear infinite;
+}
+
+@keyframes gear-spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Responsive Design Refinements */
+@media (max-width: 1280px) {
+    .hub {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+    }
+    
     .title {
-        font-size: 36px;
-        padding: 15px;
+        font-size: 42px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hub {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+    
+    .title {
+        font-size: 34px;
+        padding: 18px;
     }
     
     .light-mode .title::before,
     .light-mode .title::after {
-        font-size: 24px;
+        font-size: 28px;
     }
     
-    .light-mode .title::before { left: -30px; }
-    .light-mode .title::after { right: -30px; }
+    .light-mode .title::before { left: -35px; }
+    .light-mode .title::after { right: -35px; }
     
     .steampunk-mode .title::before,
     .steampunk-mode .title::after {
-        width: 60px;
-        height: 60px;
+        width: 70px;
+        height: 70px;
+    }
+    
+    .app-icon {
+        font-size: 56px;
+    }
+    
+    .app-name {
+        font-size: 20px;
     }
 }
 
-        .hub {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            max-width: 1400px;
-            width: 100%;
-        }
+@media (max-width: 480px) {
+    .hub {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .title {
+        font-size: 30px;
+        letter-spacing: 2px;
+    }
+    
+    #theme-toggle {
+        width: 55px;
+        height: 55px;
+    }
+}
 
-        .app {
-            aspect-ratio: 1 / 1;
-            background: var(--dark-card-bg);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--dark-border);
-            box-shadow: 0 8px 32px 0 var(--dark-shadow);
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-            color: inherit;
-        }
+/* Dark Mode Exclusive Refinements */
+.dark-mode .app::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(0, 255, 242, 0.1) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
 
-        .app::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(0, 255, 242, 0.05),
-                transparent
-            );
-            transform: rotate(45deg);
-            animation: cyberscan 4s linear infinite;
-            transition: all 0.5s ease;
-        }
+.dark-mode .app:hover::before {
+    opacity: 0.7;
+}
 
-        .app:hover::after {
-            opacity: 0.8;
-            animation-duration: 2s;
-        }
+/* Animation for Matrix Digital Rain - Dots */
+.matrix-mode .app::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(rgba(0, 255, 65, 0.2) 1px, transparent 1px), 
+        radial-gradient(rgba(0, 255, 65, 0.15) 1px, transparent 1px);
+    background-size: 20px 20px, 30px 30px;
+    background-position: 0 0, 15px 15px;
+    opacity: 0.07;
+    transition: opacity 0.6s ease;
+}
 
-        @keyframes cyberscan {
-            0% {
-                transform: translateY(-100%) rotate(45deg);
-            }
-            100% {
-                transform: translateY(100%) rotate(45deg);
-            }
-        }
+.matrix-mode .app:hover::after {
+    opacity: 0.15;
+}
 
-        .light-mode .app {
-            background: var(--light-card-bg);
-            border: 4px solid var(--light-border);
-            box-shadow: 
-                8px 8px 0 rgba(255, 77, 141, 0.5),
-                16px 16px 0 rgba(255, 77, 141, 0.3);
-        }
+/* Refined Steampunk Card Rivets */
+.steampunk-mode .app::after {
+    content: none;
+}
 
-        .matrix-mode .app {
-            background: var(--matrix-card-bg);
-            border: 2px solid var(--matrix-border);
-            box-shadow: var(--matrix-glow);
-        }
+.steampunk-mode .app::before {
+    box-shadow: 
+        inset 0 0 0 2px var(--steampunk-border),
+        inset 0 0 0 8px var(--steampunk-card-bg);
+}
 
-        .steampunk-mode .app {
-            background: var(--steampunk-card-bg);
-            border: none;
-            border-radius: 30px;
-            box-shadow: 
-                20px 20px 60px var(--steampunk-shadow),
-                -20px -20px 60px #f0e8d8, 
-                inset 10px 10px 20px #c0b8a8,
-                inset -10px -10px 20px #f0e8d8;
-        }
+/* Create the rivets - more subtle and premium */
+.steampunk-mode .app::before,
+.steampunk-mode .app::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(145deg, var(--steampunk-accent), #98702f);
+    box-shadow: 0 0 5px rgba(71, 47, 28, 0.25);
+    z-index: 3;
+}
 
-        .light-mode .app::after,
-        .matrix-mode .app::after {
-            display: none;
-        }
+.steampunk-mode .app::before {
+    top: 15px;
+    left: 15px;
+}
 
-        .steampunk-mode .app::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            background: linear-gradient(45deg, #d4c8b8, #e0d8c8);
-            border-radius: 25px;
-            z-index: -1;
-        }
-
-        .app:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 
-                0 15px 40px 0 var(--dark-shadow),
-                0 0 25px var(--dark-text);
-        }
-
-        .light-mode .app:hover {
-            transform: translateY(-15px) scale(1.1);
-            box-shadow: 
-                12px 12px 0 rgba(255, 77, 141, 0.5),
-                24px 24px 0 rgba(255, 77, 141, 0.3);
-        }
-
-        .matrix-mode .app:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 
-                0 15px 40px 0 var(--matrix-shadow),
-                0 0 25px var(--matrix-text);
-        }
-
-        .steampunk-mode .app:hover {
-            transform: translateY(-10px) scale(1.05);
-            box-shadow: 
-                30px 30px 80px var(--steampunk-shadow),
-                -30px -30px 80px #f0e8d8, 
-                inset 15px 15px 30px #c0b8a8,
-                inset -15px -15px 30px #f0e8d8;
-        }
-
-        .app-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-            transition: all 0.5s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .app:hover .app-icon {
-            transform: scale(1.2) rotate(360deg);
-            text-shadow: 0 0 15px var(--dark-text);
-        }
-
-        .light-mode .app:hover .app-icon {
-            text-shadow: 0 0 15px var(--light-text);
-        }
-
-        .matrix-mode .app:hover .app-icon {
-            text-shadow: 0 0 15px var(--matrix-text);
-        }
-
-        .steampunk-mode .app:hover .app-icon {
-            text-shadow: 2px 2px 4px var(--steampunk-shadow);
-            color: var(--steampunk-accent);
-        }
-
-        .app-name {
-            font-size: 24px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .light-mode .app-name {
-            color: var(--light-text);
-            font-weight: bold;
-            text-shadow: 3px 3px 0 rgba(255, 77, 141, 0.3);
-        }
-
-        .matrix-mode .app-name {
-            color: var(--matrix-text);
-            font-weight: bold;
-            text-shadow: 3px 3px 0 rgba(0, 255, 0, 0.3);
-        }
-
-        .steampunk-mode .app-name {
-            color: var(--steampunk-text);
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(92, 61, 46, 0.3);
-        }
-
-        .steampunk-mode .app::before {
-            content: '';
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 2px solid var(--steampunk-border);
-            border-radius: 20px;
-            pointer-events: none;
-        }
-
-        @media (max-width: 768px) {
-            .hub {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 30px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hub {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Enhanced Steampunk Neomorphic Effects */
-        .steampunk-mode .app {
-            background: 
-                linear-gradient(145deg, #e6ddd0, #c2b8a8);
-            box-shadow: 
-                20px 20px 60px #b1a796,
-                -20px -20px 60px #f7ebda,
-                inset 5px 5px 10px #c2b8a8,
-                inset -5px -5px 10px #e6ddd0;
-        }
-
-        .steampunk-mode .app:hover {
-            background: 
-                linear-gradient(145deg, #c2b8a8, #e6ddd0);
-            box-shadow: 
-                25px 25px 75px #a19687,
-                -25px -25px 75px #fffbe9,
-                inset 10px 10px 20px #b1a796,
-                inset -10px -10px 20px #f7ebda;
-        }
-
-        .steampunk-mode .app-icon {
-            color: var(--steampunk-accent);
-            text-shadow: 2px 2px 4px rgba(92, 61,46, 0.3);
-        }
-
-        .steampunk-mode .app-name {
-            background: -webkit-linear-gradient(var(--steampunk-text), var(--steampunk-accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .steampunk-mode #theme-toggle::before {
-            content: '⚙️';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-        }
-
-        .steampunk-mode #theme-toggle:hover::before {
-            animation: gear-spin 2s linear infinite;
-        }
-
-        @keyframes gear-spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
+.steampunk-mode .app::after {
+    bottom: 15px;
+    right: 15px;
+}
     </style>
 </head>
 <body>
