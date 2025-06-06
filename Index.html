@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,11 +52,7 @@
 .matrix-mode ::selection { background: var(--matrix-text); color: var(--matrix-bg); }
 .steampunk-mode ::selection { background: var(--steampunk-text); color: var(--steampunk-card-bg); }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: 'Orbitron', sans-serif;
@@ -143,11 +138,9 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
     border-radius: 50%;
     box-shadow: 6px 6px 12px var(--steampunk-shadow-dark), -6px -6px 12px var(--steampunk-shadow-light);
 }
-
 .steampunk-mode #theme-toggle:hover {
     box-shadow: 8px 8px 16px var(--steampunk-shadow-dark), -8px -8px 16px var(--steampunk-shadow-light);
 }
-
 .steampunk-mode #theme-toggle:active {
     box-shadow: inset 4px 4px 8px var(--steampunk-shadow-dark), inset -4px -4px 8px var(--steampunk-shadow-light);
 }
@@ -157,7 +150,6 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
     top: 0;
     left: 0;
     z-index: -1;
-    opacity: 0.6;
     transition: opacity 0.5s ease;
 }
 
@@ -188,28 +180,15 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
     animation: neon-flicker 4s infinite alternate;
 }
 @keyframes neon-flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-      text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 18px var(--dark-text), 0 0 38px var(--dark-text);
-  }
+  0%, 18%, 22%, 25%, 53%, 57%, 100% { text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 18px var(--dark-text), 0 0 38px var(--dark-text); }
   20%, 24%, 55% { text-shadow: 0 0 4px #fff; }
 }
 
-.dark-mode .title::before,
-.dark-mode .title::after {
-    content: attr(data-text);
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -1;
-    mix-blend-mode: screen;
+.dark-mode .title::before, .dark-mode .title::after {
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; mix-blend-mode: screen;
 }
-.dark-mode .title::before {
-    color: var(--dark-text);
-    animation: glitch 3s infinite linear alternate-reverse;
-}
-.dark-mode .title::after {
-    color: var(--dark-accent);
-    animation: glitch 3.2s infinite linear alternate;
-}
+.dark-mode .title::before { color: var(--dark-text); animation: glitch 3s infinite linear alternate-reverse; }
+.dark-mode .title::after { color: var(--dark-accent); animation: glitch 3.2s infinite linear alternate; }
 @keyframes glitch{
   0%, 100% { transform: translate(0); clip-path: inset(50% 0 30% 0); }
   20% { transform: translate(-3px, 3px); clip-path: inset(10% 0 80% 0); }
@@ -234,224 +213,56 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
     animation: matrix-title-flicker 5s infinite;
 }
 .matrix-mode .title::after {
-    content: attr(data-text);
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    color: var(--matrix-text);
-    text-shadow: -2px 0 #008F11;
-    clip-path: inset(50% 0 0 0);
-    opacity: 0.8;
-    animation: matrix-glitch-bottom 2s infinite;
+    content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; color: var(--matrix-text); text-shadow: -2px 0 #008F11; clip-path: inset(50% 0 0 0); opacity: 0.8; animation: matrix-glitch-bottom 2s infinite;
 }
-@keyframes matrix-glitch-bottom {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(0.08em); }
-}
-@keyframes matrix-title-flicker {
-  0%, 100% { opacity: 1; filter: brightness(1.2); }
-  50% { opacity: 0.9; filter: brightness(1); }
-}
+@keyframes matrix-glitch-bottom { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(0.08em); } }
+@keyframes matrix-title-flicker { 0%, 100% { opacity: 1; filter: brightness(1.2); } 50% { opacity: 0.9; filter: brightness(1); } }
 
-.steampunk-mode .title {
-    font-size: 6rem;
-    font-weight: 700;
-    color: var(--steampunk-text);
-    text-shadow: 1px 1px 1px var(--steampunk-shadow-light);
-}
+.steampunk-mode .title { font-size: 6rem; font-weight: 700; color: var(--steampunk-text); text-shadow: 1px 1px 1px var(--steampunk-shadow-light); }
 
-.hub {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 50px;
-    max-width: 1500px;
-    width: 100%;
-}
+.hub { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 50px; max-width: 1500px; width: 100%; }
 
-.app {
-    aspect-ratio: 1 / 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-}
-
-.dark-mode .app {
-    background: var(--dark-card-bg);
-    border-radius: 20px;
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--dark-border);
-    box-shadow: 0 10px 30px var(--dark-shadow);
-    transform: rotateX(10deg) rotateY(0deg);
-}
-.dark-mode .app:hover {
-    transform: translateY(-20px) scale(1.05) rotateX(0deg) rotateY(0deg);
-    box-shadow: 0 25px 50px var(--dark-shadow);
-    border-color: var(--dark-text);
-}
-.dark-mode .app::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 234, 255, 0.1), transparent);
-    transition: left 0.8s ease;
-}
+.app { aspect-ratio: 1 / 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; text-decoration: none; color: inherit; }
+.dark-mode .app { background: var(--dark-card-bg); border-radius: 20px; backdrop-filter: blur(20px); border: 1px solid var(--dark-border); box-shadow: 0 10px 30px var(--dark-shadow); transform: rotateX(10deg) rotateY(0deg); }
+.dark-mode .app:hover { transform: translateY(-20px) scale(1.05) rotateX(0deg) rotateY(0deg); box-shadow: 0 25px 50px var(--dark-shadow); border-color: var(--dark-text); }
+.dark-mode .app::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 234, 255, 0.1), transparent); transition: left 0.8s ease; }
 .dark-mode .app:hover::before { left: 100%; }
+.light-mode .app { background: var(--light-card-bg); box-shadow: 8px 8px 0px var(--light-shadow); border-radius: 30px; transform: none; }
+.light-mode .app:hover { transform: translate(-8px, -8px); box-shadow: 16px 16px 0px var(--light-shadow), 16px 16px 20px rgba(255, 58, 139, 0.1); }
+.matrix-mode .app { background: var(--matrix-card-bg); border: 2px solid var(--matrix-border); border-radius: 0; box-shadow: 0 0 25px var(--matrix-shadow), inset 0 0 15px rgba(57, 255, 20, 0.1); transform: none; animation: matrix-flicker 4s infinite ease-in-out; }
+.matrix-mode .app::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, rgba(57, 255, 20, 0.1), rgba(57, 255, 20, 0.1) 1px, transparent 1px, transparent 4px); opacity: 0.5; pointer-events: none; }
+.matrix-mode .app:hover { transform: scale(1.03); background: rgba(0, 40, 0, 0.8); box-shadow: 0 0 40px var(--matrix-shadow), inset 0 0 20px rgba(57, 255, 20, 0.2); border-color: var(--matrix-text); }
+.steampunk-mode .app { background: var(--steampunk-card-bg); border: none; border-radius: 30px; box-shadow: 12px 12px 24px var(--steampunk-shadow-dark), -12px -12px 24px var(--steampunk-shadow-light); transform: none; }
+.steampunk-mode .app:hover { transform: scale(1.05); box-shadow: 15px 15px 30px var(--steampunk-shadow-dark), -15px -15px 30px var(--steampunk-shadow-light); }
+.steampunk-mode .app:active, .steampunk-mode .app.active { transform: scale(0.98); box-shadow: inset 7px 7px 14px var(--steampunk-shadow-dark), inset -7px -7px 14px var(--steampunk-shadow-light); }
 
-.light-mode .app {
-    background: var(--light-card-bg);
-    box-shadow: 8px 8px 0px var(--light-shadow);
-    border-radius: 30px;
-    transform: none;
-}
-.light-mode .app:hover {
-    transform: translate(-8px, -8px);
-    box-shadow: 16px 16px 0px var(--light-shadow), 16px 16px 20px rgba(255, 58, 139, 0.1);
-}
+.app-icon { font-size: 5rem; margin-bottom: 20px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2; }
+.dark-mode .app-icon { text-shadow: 0 0 15px var(--dark-text); }
+.dark-mode .app:hover .app-icon { transform: scale(1.1) rotate(-10deg); color: #fff; text-shadow: 0 0 10px #fff, 0 0 20px var(--dark-text), 0 0 35px var(--dark-accent); }
+.light-mode .app-icon { color: var(--light-text); text-shadow: 3px 3px 0 var(--light-accent); }
+.light-mode .app:hover .app-icon { transform: scale(1.2) rotate(10deg); color: var(--light-accent); text-shadow: 3px 3px 0 var(--light-text); animation: bounce 0.5s; }
+@keyframes bounce { 0%, 100% { transform: scale(1.2) rotate(10deg) translateY(0); } 50% { transform: scale(1.2) rotate(10deg) translateY(-10px); } }
+.matrix-mode .app-icon { text-shadow: 0 0 10px var(--matrix-text); }
+.matrix-mode .app:hover .app-icon { transform: scale(1.1); color: #fff; text-shadow: 0 0 7px rgba(255, 255, 255, 0.8), 0 0 15px var(--matrix-text), 0 0 25px var(--matrix-text); }
+.steampunk-mode .app-icon { color: var(--steampunk-text); text-shadow: 1px 1px 1px var(--steampunk-shadow-light); font-size: 4.5rem; }
+.steampunk-mode .app:hover .app-icon { transform: scale(1.1); color: var(--steampunk-text); text-shadow: 0 0 8px var(--steampunk-glow), 1px 1px 1px var(--steampunk-shadow-light); }
+.steampunk-mode .app:active .app-icon, .steampunk-mode .app.active .app-icon { transform: scale(0.95); }
 
-.matrix-mode .app {
-    background: var(--matrix-card-bg);
-    border: 2px solid var(--matrix-border);
-    border-radius: 0;
-    box-shadow: 0 0 25px var(--matrix-shadow), inset 0 0 15px rgba(57, 255, 20, 0.1);
-    transform: none;
-    animation: matrix-flicker 4s infinite ease-in-out;
-}
-.matrix-mode .app::after {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: repeating-linear-gradient(0deg, rgba(57, 255, 20, 0.1), rgba(57, 255, 20, 0.1) 1px, transparent 1px, transparent 4px);
-    opacity: 0.5;
-    pointer-events: none;
-}
-.matrix-mode .app:hover {
-    transform: scale(1.03);
-    background: rgba(0, 40, 0, 0.8);
-    box-shadow: 0 0 40px var(--matrix-shadow), inset 0 0 20px rgba(57, 255, 20, 0.2);
-    border-color: var(--matrix-text);
-}
-
-.steampunk-mode .app {
-    background: var(--steampunk-card-bg);
-    border: none;
-    border-radius: 30px;
-    box-shadow: 12px 12px 24px var(--steampunk-shadow-dark), -12px -12px 24px var(--steampunk-shadow-light);
-    transform: none;
-}
-.steampunk-mode .app:hover {
-    transform: scale(1.05);
-    box-shadow: 15px 15px 30px var(--steampunk-shadow-dark), -15px -15px 30px var(--steampunk-shadow-light);
-}
-.steampunk-mode .app:active, .steampunk-mode .app.active {
-    transform: scale(0.98);
-    box-shadow: inset 7px 7px 14px var(--steampunk-shadow-dark), inset -7px -7px 14px var(--steampunk-shadow-light);
-}
-
-.app-icon {
-    font-size: 5rem;
-    margin-bottom: 20px;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 2;
-}
-
-.dark-mode .app-icon {
-    text-shadow: 0 0 15px var(--dark-text);
-}
-.dark-mode .app:hover .app-icon {
-    transform: scale(1.1) rotate(-10deg);
-    color: #fff;
-    text-shadow: 0 0 10px #fff, 0 0 20px var(--dark-text), 0 0 35px var(--dark-accent);
-}
-
-.light-mode .app-icon {
-    color: var(--light-text);
-    text-shadow: 3px 3px 0 var(--light-accent);
-}
-.light-mode .app:hover .app-icon {
-    transform: scale(1.2) rotate(10deg);
-    color: var(--light-accent);
-    text-shadow: 3px 3px 0 var(--light-text);
-    animation: bounce 0.5s;
-}
-@keyframes bounce {
-    0%, 100% { transform: scale(1.2) rotate(10deg) translateY(0); }
-    50% { transform: scale(1.2) rotate(10deg) translateY(-10px); }
-}
-
-.matrix-mode .app-icon {
-    text-shadow: 0 0 10px var(--matrix-text);
-}
-/* REFINED: Toned down matrix icon hover effect */
-.matrix-mode .app:hover .app-icon {
-    transform: scale(1.1);
-    color: #fff;
-    text-shadow: 0 0 7px rgba(255, 255, 255, 0.8), 0 0 15px var(--matrix-text), 0 0 25px var(--matrix-text);
-}
-
-.steampunk-mode .app-icon {
-    color: var(--steampunk-text);
-    text-shadow: 1px 1px 1px var(--steampunk-shadow-light);
-    font-size: 4.5rem;
-}
-.steampunk-mode .app:hover .app-icon {
-    transform: scale(1.1);
-    color: var(--steampunk-text);
-    text-shadow: 0 0 8px var(--steampunk-glow), 1px 1px 1px var(--steampunk-shadow-light);
-}
-.steampunk-mode .app:active .app-icon, .steampunk-mode .app.active .app-icon {
-    transform: scale(0.95);
-}
-
-.app-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    text-align: center;
-    transition: all 0.4s ease;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    z-index: 2;
-    padding: 0 10px;
-}
-.dark-mode .app:hover .app-name {
-    color: var(--dark-text);
-    text-shadow: 0 0 10px var(--dark-text);
-}
-
-.steampunk-mode .app-name {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--steampunk-accent);
-    text-shadow: 1px 1px 1px var(--steampunk-shadow-light);
-}
+.app-name { font-size: 1.5rem; font-weight: 700; text-align: center; transition: all 0.4s ease; text-transform: uppercase; letter-spacing: 2px; z-index: 2; padding: 0 10px; }
+.dark-mode .app:hover .app-name { color: var(--dark-text); text-shadow: 0 0 10px var(--dark-text); }
+.steampunk-mode .app-name { font-size: 1.4rem; font-weight: 700; color: var(--steampunk-accent); text-shadow: 1px 1px 1px var(--steampunk-shadow-light); }
 
 @media (max-width: 768px) {
-    .title { font-size: 3rem; }
-    .steampunk-mode .title { font-size: 4rem; }
-    .hub { grid-template-columns: 1fr 1fr; gap: 30px; }
-    .app-icon { font-size: 4rem; }
-    .app-name { font-size: 1.2rem; }
+    .title { font-size: 3rem; } .steampunk-mode .title { font-size: 4rem; } .hub { grid-template-columns: 1fr 1fr; gap: 30px; } .app-icon { font-size: 4rem; } .app-name { font-size: 1.2rem; }
 }
-
 @media (max-width: 480px) {
-    .title { font-size: 2.5rem; letter-spacing: 2px; }
-    .hub { grid-template-columns: 1fr; gap: 25px; }
-    .container { padding: 80px 20px; }
-    #theme-toggle { width: 50px; height: 50px; top: 15px; right: 15px; }
+    .title { font-size: 2.5rem; letter-spacing: 2px; } .hub { grid-template-columns: 1fr; gap: 25px; } .container { padding: 80px 20px; } #theme-toggle { width: 50px; height: 50px; top: 15px; right: 15px; }
 }
     </style>
 </head>
 <body class="dark-mode">
 
-    <button id="theme-toggle">
-        <i class="fas fa-moon"></i>
-    </button>
+    <button id="theme-toggle"> <i class="fas fa-moon"></i> </button>
     <canvas id="bg-canvas"></canvas>
     <div id="matrix-rain-container"></div>
 
@@ -496,14 +307,10 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
     <script>
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({
-            canvas: document.getElementById('bg-canvas'),
-            alpha: true,
-            antialias: true
-        });
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('bg-canvas'), alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
-        camera.position.z = 25;
+        camera.position.z = 40;
 
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('i');
@@ -511,104 +318,132 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
         const urls1 = ['https://newlist2.vercel.app/', 'https://newlist-eta.vercel.app/'];
 
         const themes = ['dark', 'light', 'matrix', 'steampunk'];
-        const themeIcons = {
-            'dark': 'fa-moon',
-            'light': 'fa-sun',
-            'matrix': 'fa-terminal',
-            'steampunk': 'fa-cogs'
-        };
+        const themeIcons = { 'dark': 'fa-moon', 'light': 'fa-sun', 'matrix': 'fa-terminal', 'steampunk': 'fa-cogs' };
         let currentThemeIndex = 0;
         let matrixRainInstance = null;
+        
+        const darkGroup = new THREE.Group();
+        const mainMesh = new THREE.Mesh(); // For Light and Matrix themes
+        const steampunkGroup = new THREE.Group();
+        scene.add(darkGroup, mainMesh, steampunkGroup);
 
-        const geometries = {
-            dark: new THREE.TorusKnotGeometry(8, 2.5, 200, 32),
-            light: new THREE.IcosahedronGeometry(12, 1),
-            matrix: new THREE.BoxGeometry(12, 12, 12, 10, 10, 10)
-        };
+        let animateDark = () => {}, animateMain = () => {}, animateSteampunk = () => {};
 
-        const materials = {
-            dark: new THREE.MeshBasicMaterial({ color: 0x00eaff, wireframe: true }),
-            light: new THREE.MeshBasicMaterial({ color: 0xff3a8b, wireframe: true }),
-            matrix: new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true })
-        };
+        // NEW: Subtle Asteroid Field for Dark Theme
+        function createDarkScene() {
+            const asteroidGeometry = new THREE.IcosahedronGeometry(1, 0);
+            const material = new THREE.MeshStandardMaterial({ color: 0x2a3b5a, roughness: 0.8, metalness: 0.5 });
 
-        const mainMesh = new THREE.Mesh();
-        scene.add(mainMesh);
+            for (let i = 0; i < 300; i++) {
+                const mesh = new THREE.Mesh(asteroidGeometry, material);
+                mesh.position.set((Math.random() - 0.5) * 150, (Math.random() - 0.5) * 150, (Math.random() - 0.5) * 150);
+                mesh.scale.setScalar(Math.random() * 0.8 + 0.2);
+                mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+                mesh.userData.rotationSpeed = new THREE.Vector3(Math.random() * 0.001, Math.random() * 0.001, Math.random() * 0.001);
+                darkGroup.add(mesh);
+            }
+            darkGroup.add(new THREE.AmbientLight(0x404040, 0.5));
+            const directionalLight = new THREE.DirectionalLight(0x2d68ff, 0.3);
+            directionalLight.position.set(1, 1, 1);
+            darkGroup.add(directionalLight);
+
+            animateDark = () => {
+                darkGroup.children.forEach(child => {
+                    if (child.isMesh) {
+                        child.rotation.x += child.userData.rotationSpeed.x;
+                        child.rotation.y += child.userData.rotationSpeed.y;
+                        child.rotation.z += child.userData.rotationSpeed.z;
+                    }
+                });
+                darkGroup.rotation.y += 0.0001;
+            };
+        }
+
+        const lightGeometry = new THREE.IcosahedronGeometry(12, 1);
+        const lightMaterial = new THREE.MeshBasicMaterial({ color: 0xff3a8b, wireframe: true });
+
+        const matrixGeometry = new THREE.BoxGeometry(12, 12, 12, 10, 10, 10);
+        const matrixMaterial = new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true });
+
+        animateMain = () => { mainMesh.rotation.x += 0.001; mainMesh.rotation.y += 0.002; };
+        
+        function createSteampunkScene() {
+            const gearShape = (outerRadius, innerRadius, teeth, toothDepth) => {
+                const shape = new THREE.Shape();
+                shape.moveTo(outerRadius, 0);
+                for (let i = 0; i < teeth; i++) {
+                    const angle = (i / teeth) * Math.PI * 2;
+                    shape.absarc(0, 0, outerRadius, angle, angle + (Math.PI / teeth) * 0.4, false);
+                    shape.absarc(0, 0, outerRadius - toothDepth, angle + (Math.PI / teeth) * 0.4, angle + (Math.PI / teeth) * 0.6, false);
+                    shape.absarc(0, 0, outerRadius, angle + (Math.PI / teeth) * 0.6, angle + Math.PI / teeth, false);
+                }
+                const holePath = new THREE.Path();
+                holePath.absarc(0, 0, innerRadius, 0, Math.PI * 2, true);
+                shape.holes.push(holePath);
+                return shape;
+            };
+            const extrudeSettings = { depth: 1, bevelEnabled: true, bevelThickness: 0.2, bevelSize: 0.2, bevelSegments: 2 };
+            const material = new THREE.MeshPhongMaterial({ color: 0xe6e7ee, shininess: 5, flatShading: false });
+            
+            const gearConfigs = [
+                { shape: gearShape(8, 2, 20, 1), pos: { x: 0, y: 0, z: 0 }, rotSpeed: 0.002 },
+                { shape: gearShape(4, 1, 10, 1), pos: { x: 10, y: 5, z: 1 }, rotSpeed: -0.004 },
+                { shape: gearShape(5, 1.5, 12, 1), pos: { x: -9, y: -7, z: -1 }, rotSpeed: 0.003 }
+            ];
+
+            gearConfigs.forEach(c => {
+                const geometry = new THREE.ExtrudeGeometry(c.shape, extrudeSettings);
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(c.pos.x, c.pos.y, c.pos.z);
+                mesh.userData.rotSpeed = c.rotSpeed;
+                steampunkGroup.add(mesh);
+            });
+
+            steampunkGroup.add(new THREE.AmbientLight(0xffffff, 0.4));
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(-10, 10, 10);
+            steampunkGroup.add(directionalLight);
+
+            animateSteampunk = () => {
+                steampunkGroup.children.forEach(child => {
+                    if(child.isMesh) child.rotation.z += child.userData.rotSpeed;
+                });
+            };
+        }
 
         class MatrixRain {
-            constructor(container) {
-                this.container = container;
-                this.canvas = document.createElement('canvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.container.appendChild(this.canvas);
-                this.alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン01';
-                this.fontSize = 16;
-                this.resize();
-                window.addEventListener('resize', () => this.resize());
-                this.animationFrameId = null;
-            }
-
-            resize() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-                this.canvas.style.position = 'fixed';
-                this.canvas.style.top = '0';
-                this.canvas.style.left = '0';
-                this.canvas.style.zIndex = '-1';
-                this.canvas.style.opacity = '0.5'; 
-                this.columns = this.canvas.width / this.fontSize;
-                this.rainDrops = Array.from({ length: Math.ceil(this.columns) }).fill(1);
-            }
-
-            draw() {
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                this.ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--matrix-text');
-                this.ctx.font = this.fontSize + 'px monospace';
-
-                for (let i = 0; i < this.rainDrops.length; i++) {
-                    const text = this.alphabet.charAt(Math.floor(Math.random() * this.alphabet.length));
-                    this.ctx.fillText(text, i * this.fontSize, this.rainDrops[i] * this.fontSize);
-                    if (this.rainDrops[i] * this.fontSize > this.canvas.height && Math.random() > 0.975) {
-                        this.rainDrops[i] = 0;
-                    }
-                    this.rainDrops[i]++;
-                }
-                this.animationFrameId = requestAnimationFrame(() => this.draw());
-            }
+            constructor(container) { this.container = container; this.canvas = document.createElement('canvas'); this.ctx = this.canvas.getContext('2d'); this.container.appendChild(this.canvas); this.alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン01'; this.fontSize = 16; this.resize(); window.addEventListener('resize', () => this.resize()); this.animationFrameId = null; }
+            resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; this.canvas.style.cssText = 'position:fixed; top:0; left:0; z-index:-1; opacity:0.7;'; this.columns = this.canvas.width / this.fontSize; this.rainDrops = Array.from({ length: Math.ceil(this.columns) }).fill(1); }
+            draw() { this.ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'; this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height); this.ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--matrix-text'); this.ctx.font = this.fontSize + 'px monospace'; for (let i = 0; i < this.rainDrops.length; i++) { const text = this.alphabet.charAt(Math.floor(Math.random() * this.alphabet.length)); this.ctx.fillText(text, i * this.fontSize, this.rainDrops[i] * this.fontSize); if (this.rainDrops[i] * this.fontSize > this.canvas.height && Math.random() > 0.975) { this.rainDrops[i] = 0; } this.rainDrops[i]++; } this.animationFrameId = requestAnimationFrame(() => this.draw()); }
             start() { this.draw(); }
-            stop() {
-                if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-                if (this.container) this.container.innerHTML = '';
-            }
+            stop() { if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId); if (this.container) this.container.innerHTML = ''; }
         }
         
         function updateSceneForTheme(theme) {
-            document.body.className = `${theme}-mode`;
-            themeIcon.className = `fas ${themeIcons[theme]}`;
-
-            if (matrixRainInstance) {
-                matrixRainInstance.stop();
-                matrixRainInstance = null;
-            }
-            mainMesh.visible = false;
-            renderer.domElement.style.display = 'none';
+            document.body.className = `${theme}-mode`; themeIcon.className = `fas ${themeIcons[theme]}`;
+            darkGroup.visible = mainMesh.visible = steampunkGroup.visible = false;
+            if (matrixRainInstance) { matrixRainInstance.stop(); matrixRainInstance = null; }
             
             switch (theme) {
                 case 'dark':
+                    if (darkGroup.children.length === 0) createDarkScene();
+                    darkGroup.visible = true;
+                    break;
                 case 'light':
-                case 'matrix':
-                    mainMesh.geometry = geometries[theme];
-                    mainMesh.material = materials[theme];
+                    mainMesh.geometry = lightGeometry;
+                    mainMesh.material = lightMaterial;
                     mainMesh.visible = true;
-                    renderer.domElement.style.display = 'block';
-                    if (theme === 'matrix') {
-                        matrixRainInstance = new MatrixRain(document.getElementById('matrix-rain-container'));
-                        matrixRainInstance.start();
-                    }
+                    break;
+                case 'matrix':
+                    mainMesh.geometry = matrixGeometry;
+                    mainMesh.material = matrixMaterial;
+                    mainMesh.visible = true;
+                    matrixRainInstance = new MatrixRain(document.getElementById('matrix-rain-container'));
+                    matrixRainInstance.start();
                     break;
                 case 'steampunk':
-                    renderer.domElement.style.display = 'none';
+                    if (steampunkGroup.children.length === 0) createSteampunkScene();
+                    steampunkGroup.visible = true;
                     break;
             }
         }
@@ -619,28 +454,20 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
         });
         
         dualLink1.addEventListener('click', (e) => {
-            if (document.body.classList.contains('steampunk-mode')) {
-                e.currentTarget.classList.add('active');
-                setTimeout(() => e.currentTarget.classList.remove('active'), 200);
-            }
+            if (document.body.classList.contains('steampunk-mode')) { e.currentTarget.classList.add('active'); setTimeout(() => e.currentTarget.classList.remove('active'), 200); }
             const randomUrl = urls1[Math.floor(Math.random() * urls1.length)];
             window.open(randomUrl, '_blank', 'noopener,noreferrer');
         });
         
         function animate() {
             requestAnimationFrame(animate);
-            if (mainMesh.visible) {
-                mainMesh.rotation.x += 0.001;
-                mainMesh.rotation.y += 0.002;
-            }
+            if(darkGroup.visible) animateDark();
+            if(mainMesh.visible) animateMain();
+            if(steampunkGroup.visible) animateSteampunk();
             renderer.render(scene, camera);
         }
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }, false);
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }, false);
         
         updateSceneForTheme(themes[currentThemeIndex]);
         animate();
