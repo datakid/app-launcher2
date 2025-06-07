@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
 :root {
-    /* Dark Theme: Pure Cyberpunk Noir */
     --dark-bg: #010413;
     --dark-bg-gradient: linear-gradient(145deg, #010413, #0a0c20, #03010f);
     --dark-card-bg: rgba(18, 25, 58, 0.6);
@@ -20,7 +19,6 @@
     --dark-border: rgba(0, 234, 255, 0.25);
     --dark-shadow: rgba(0, 234, 255, 0.1);
 
-    /* Light Theme: Vibrant & Poppy */
     --light-bg: #f4f5f7;
     --light-bg-gradient: linear-gradient(145deg, #fdfcff, #f2f1f7, #e8e6f0);
     --light-card-bg: rgba(255, 255, 255, 0.9);
@@ -29,7 +27,6 @@
     --light-border: rgba(255, 58, 139, 0.4);
     --light-shadow: rgba(255, 58, 139, 0.2); 
 
-    /* Matrix Theme: Authentic & Iconic */
     --matrix-bg: #000000;
     --matrix-bg-gradient: linear-gradient(145deg, #000, #020a02, #000500, #000);
     --matrix-card-bg: rgba(0, 20, 0, 0.75);
@@ -37,7 +34,6 @@
     --matrix-border: rgba(57, 255, 20, 0.3);
     --matrix-shadow: rgba(57, 255, 20, 0.2);
 
-    /* Steampunk Theme: Ultimate Neomorphism */
     --steampunk-bg: #e6e7ee;
     --steampunk-card-bg: #e6e7ee;
     --steampunk-text: #5b627a;
@@ -187,14 +183,20 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
 .dark-mode .title::before, .dark-mode .title::after {
     content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; mix-blend-mode: screen;
 }
-.dark-mode .title::before { color: var(--dark-text); animation: glitch 3s infinite linear alternate-reverse; }
-.dark-mode .title::after { color: var(--dark-accent); animation: glitch 3.2s infinite linear alternate; }
+.dark-mode .title::before { color: var(--dark-text); animation: glitch 6s infinite linear alternate-reverse; }
+.dark-mode .title::after { color: var(--dark-accent); animation: glitch 4.5s infinite linear alternate; }
 @keyframes glitch{
-  0%, 100% { transform: translate(0); clip-path: inset(50% 0 30% 0); }
-  20% { transform: translate(-3px, 3px); clip-path: inset(10% 0 80% 0); }
-  40% { transform: translate(-3px, -3px); clip-path: inset(70% 0 5% 0); }
-  60% { transform: translate(3px, 3px); clip-path: inset(40% 0 40% 0); }
-  80% { transform: translate(3px, -3px); clip-path: inset(90% 0 2% 0); }
+  0% { clip-path: inset(78% 0 20% 0); transform: translate(-5px, 2px); }
+  10% { clip-path: inset(45% 0 53% 0); transform: translate(3px, -1px); }
+  20% { clip-path: inset(90% 0 5% 0); transform: translate(-7px, 4px); }
+  30% { clip-path: inset(23% 0 70% 0); transform: translate(6px, -3px); }
+  40% { clip-path: inset(5% 0 88% 0); transform: translate(-4px, 1px); }
+  50% { clip-path: inset(62% 0 35% 0); transform: translate(2px, 3px); }
+  60% { clip-path: inset(98% 0 1% 0); transform: translate(-6px, -2px); }
+  70% { clip-path: inset(30% 0 65% 0); transform: translate(8px, 0); }
+  80% { clip-path: inset(70% 0 27% 0); transform: translate(-3px, 2px); }
+  90% { clip-path: inset(15% 0 80% 0); transform: translate(5px, -4px); }
+  100% { clip-path: inset(95% 0 2% 0); transform: translate(-2px, 0); }
 }
 
 .light-mode .title {
@@ -234,7 +236,7 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
     overflow: hidden;
     text-decoration: none;
     color: inherit;
-    border-radius: 30px; /* Elegant standard round corner */
+    border-radius: 30px;
 }
 
 .dark-mode .app {
@@ -272,7 +274,7 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
 .matrix-mode .app {
     background: var(--matrix-card-bg);
     border: 2px solid var(--matrix-border);
-    border-radius: 10px; /* Slightly less round for terminal feel */
+    border-radius: 10px;
     box-shadow: 0 0 25px var(--matrix-shadow), inset 0 0 15px rgba(57, 255, 20, 0.1);
     transform: none;
     animation: matrix-flicker 4s infinite ease-in-out;
@@ -335,7 +337,6 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
 
     <button id="theme-toggle"> <i class="fas fa-moon"></i> </button>
     <canvas id="bg-canvas"></canvas>
-    <div id="matrix-rain-container"></div>
 
     <div class="container">
         <h1 class="title" data-text="LinkExpress">LinkExpress</h1>
@@ -391,7 +392,7 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
         const themes = ['dark', 'light', 'matrix', 'steampunk'];
         const themeIcons = { 'dark': 'fa-moon', 'light': 'fa-sun', 'matrix': 'fa-terminal', 'steampunk': 'fa-cogs' };
         let currentThemeIndex = 0;
-        let matrixRainInstance = null;
+        let matrixInterval = null;
         
         const darkGroup = new THREE.Group();
         const mainMesh = new THREE.Mesh();
@@ -412,7 +413,7 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
                         map: texture,
                         color: Math.random() > 0.5 ? 0x00eaff : 0x2d68ff,
                         transparent: true,
-                        opacity: 0.3 + Math.random() * 0.4,
+                        opacity: 0.2 + Math.random() * 0.4,
                         blending: THREE.AdditiveBlending,
                         depthWrite: false,
                         side: THREE.DoubleSide
@@ -427,6 +428,7 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
             });
 
             animateDark = () => {
+                darkGroup.rotation.y += 0.0002;
                 darkGroup.children.forEach(shard => {
                     shard.position.y += shard.userData.speed;
                     shard.rotation.z += 0.001;
@@ -437,36 +439,53 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
             };
         }
 
-        const lightGeometry = new THREE.IcosahedronGeometry(12, 1);
-        const lightMaterial = new THREE.MeshBasicMaterial({ color: 0xff3a8b, wireframe: true });
-
-        const matrixGeometry = new THREE.BoxGeometry(12, 12, 12, 10, 10, 10);
-        const matrixMaterial = new THREE.MeshBasicMaterial({ color: 0x39ff14, wireframe: true });
+        const lightGeometry = new THREE.DodecahedronGeometry(20, 1);
+        const lightMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0xff4d8d,                     
+            wireframe: true,                     
+            wireframeLinewidth: 3.0,             
+            transparent: true,                   
+            opacity: 0.4,                        
+            emissive: 0xff4d8d,                  
+            emissiveIntensity: 0.5,              
+            depthWrite: false,                   
+            depthTest: true,                     
+            side: THREE.DoubleSide,              
+            alphaTest: 0.1,                      
+            polygonOffset: true,                 
+            polygonOffsetFactor: 1.0,            
+            polygonOffsetUnits: 1.0               
+        });
 
         animateMain = () => { mainMesh.rotation.x += 0.001; mainMesh.rotation.y += 0.002; };
         
         function createSteampunkScene() {
-            const gearShape = (outerRadius, innerRadius, teeth, toothDepth) => {
+            const createGearShape = (outerRadius, innerRadius, teeth, toothDepth) => {
                 const shape = new THREE.Shape();
+                const PI2 = Math.PI * 2;
                 shape.moveTo(outerRadius, 0);
                 for (let i = 0; i < teeth; i++) {
-                    const angle = (i / teeth) * Math.PI * 2;
-                    shape.absarc(0, 0, outerRadius, angle, angle + (Math.PI / teeth) * 0.4, false);
-                    shape.absarc(0, 0, outerRadius - toothDepth, angle + (Math.PI / teeth) * 0.4, angle + (Math.PI / teeth) * 0.6, false);
-                    shape.absarc(0, 0, outerRadius, angle + (Math.PI / teeth) * 0.6, angle + Math.PI / teeth, false);
+                    const angle = (i / teeth) * PI2;
+                    const nextAngle = ((i + 1) / teeth) * PI2;
+                    shape.lineTo(Math.cos(angle) * outerRadius, Math.sin(angle) * outerRadius);
+                    shape.lineTo(Math.cos(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth), Math.sin(angle + PI2 / (4 * teeth)) * (outerRadius - toothDepth));
+                    shape.lineTo(Math.cos(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth), Math.sin(nextAngle - PI2 / (4 * teeth)) * (outerRadius - toothDepth));
+                    shape.lineTo(Math.cos(nextAngle) * outerRadius, Math.sin(nextAngle) * outerRadius);
                 }
+                shape.lineTo(outerRadius, 0);
                 const holePath = new THREE.Path();
-                holePath.absarc(0, 0, innerRadius, 0, Math.PI * 2, true);
+                holePath.absarc(0, 0, innerRadius, 0, PI2, true);
                 shape.holes.push(holePath);
                 return shape;
             };
+
             const extrudeSettings = { depth: 1, bevelEnabled: true, bevelThickness: 0.2, bevelSize: 0.2, bevelSegments: 2 };
             const material = new THREE.MeshPhongMaterial({ color: 0xe6e7ee, shininess: 5, flatShading: false });
             
             const gearConfigs = [
-                { shape: gearShape(8, 2, 20, 1), pos: { x: 0, y: 0, z: 0 }, rotSpeed: 0.002 },
-                { shape: gearShape(4, 1, 10, 1), pos: { x: 10, y: 5, z: 1 }, rotSpeed: -0.004 },
-                { shape: gearShape(5, 1.5, 12, 1), pos: { x: -9, y: -7, z: -1 }, rotSpeed: 0.003 }
+                { shape: createGearShape(8, 2, 20, 1.2), pos: { x: 0, y: 0, z: 0 }, rotSpeed: 0.002 },
+                { shape: createGearShape(4, 1, 10, 1), pos: { x: 10, y: 5, z: 1 }, rotSpeed: -0.004 },
+                { shape: createGearShape(5, 1.5, 12, 1.1), pos: { x: -9, y: -7, z: -1 }, rotSpeed: 0.003 }
             ];
 
             gearConfigs.forEach(c => {
@@ -477,25 +496,83 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
                 steampunkGroup.add(mesh);
             });
 
-            steampunkGroup.add(new THREE.AmbientLight(0xffffff, 0.4));
+            steampunkGroup.add(new THREE.AmbientLight(0xffffff, 0.5));
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
             directionalLight.position.set(-10, 10, 10);
             steampunkGroup.add(directionalLight);
+            const fillLight = new THREE.PointLight(0xffe0b3, 0.3);
+            fillLight.position.set(0, -15, 5);
+            steampunkGroup.add(fillLight);
+
             animateSteampunk = () => steampunkGroup.children.forEach(c => { if(c.isMesh) c.rotation.z += c.userData.rotSpeed; });
         }
 
-        class MatrixRain {
-            constructor(container) { this.container = container; this.canvas = document.createElement('canvas'); this.ctx = this.canvas.getContext('2d'); this.container.appendChild(this.canvas); this.alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン01'; this.fontSize = 16; this.resize(); window.addEventListener('resize', () => this.resize()); this.animationFrameId = null; }
-            resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; this.canvas.style.cssText = 'position:fixed; top:0; left:0; z-index:-1; opacity:0.7;'; this.columns = this.canvas.width / this.fontSize; this.rainDrops = Array.from({ length: Math.ceil(this.columns) }).fill(1); }
-            draw() { this.ctx.fillStyle = 'rgba(0, 0, 0, 0.04)'; this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height); this.ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--matrix-text'); this.ctx.font = this.fontSize + 'px monospace'; for (let i = 0; i < this.rainDrops.length; i++) { const text = this.alphabet.charAt(Math.floor(Math.random() * this.alphabet.length)); this.ctx.fillText(text, i * this.fontSize, this.rainDrops[i] * this.fontSize); if (this.rainDrops[i] * this.fontSize > this.canvas.height && Math.random() > 0.975) { this.rainDrops[i] = 0; } this.rainDrops[i]++; } this.animationFrameId = requestAnimationFrame(() => this.draw()); }
-            start() { this.draw(); }
-            stop() { if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId); if (this.container) this.container.innerHTML = ''; }
+        function createMatrixRain() {
+            const canvas = document.createElement('canvas');
+            canvas.className = 'matrix-rain-canvas';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.zIndex = '-1';
+            canvas.style.opacity = '0.3';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            const alphabet = katakana + latin + nums + symbols;
+
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const rainDrops = [];
+            for (let x = 0; x < columns; x++) rainDrops[x] = 1;
+            const colors = ['#0F0', '#00FF00', '#32CD32', '#98FB98'];
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+                    ctx.font = `${fontSize}px monospace`;
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+
+                if (Math.random() > 0.95) {
+                    ctx.fillStyle = '#FFFFFF';
+                    const streakColumn = Math.floor(Math.random() * columns);
+                    for (let j = 0; j < 5; j++) {
+                        const streakChar = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                        ctx.fillText(streakChar, streakColumn * fontSize, (rainDrops[streakColumn] + j) * fontSize);
+                    }
+                }
+            }
+            return setInterval(draw, 33);
         }
         
         function updateSceneForTheme(theme) {
-            document.body.className = `${theme}-mode`; themeIcon.className = `fas ${themeIcons[theme]}`;
+            document.body.className = `${theme}-mode`;
+            themeIcon.className = `fas ${themeIcons[theme]}`;
+            
             darkGroup.visible = mainMesh.visible = steampunkGroup.visible = false;
-            if (matrixRainInstance) { matrixRainInstance.stop(); matrixRainInstance = null; }
+            
+            if (matrixInterval) {
+                clearInterval(matrixInterval);
+                const canvas = document.querySelector('.matrix-rain-canvas');
+                if (canvas) canvas.remove();
+                matrixInterval = null;
+            }
             
             switch (theme) {
                 case 'dark':
@@ -508,11 +585,7 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
                     mainMesh.visible = true;
                     break;
                 case 'matrix':
-                    mainMesh.geometry = matrixGeometry;
-                    mainMesh.material = matrixMaterial;
-                    mainMesh.visible = true;
-                    matrixRainInstance = new MatrixRain(document.getElementById('matrix-rain-container'));
-                    matrixRainInstance.start();
+                    matrixInterval = createMatrixRain();
                     break;
                 case 'steampunk':
                     if (steampunkGroup.children.length === 0) createSteampunkScene();
@@ -532,7 +605,17 @@ body.steampunk-mode { background: var(--steampunk-bg); color: var(--steampunk-te
             renderer.render(scene, camera);
         }
 
-        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }, false);
+        window.addEventListener('resize', () => {
+             camera.aspect = window.innerWidth / window.innerHeight;
+             camera.updateProjectionMatrix();
+             renderer.setSize(window.innerWidth, window.innerHeight);
+             if (matrixInterval) {
+                clearInterval(matrixInterval);
+                const canvas = document.querySelector('.matrix-rain-canvas');
+                if (canvas) canvas.remove();
+                matrixInterval = createMatrixRain();
+             }
+        }, false);
         
         updateSceneForTheme(themes[currentThemeIndex]);
         animate();
