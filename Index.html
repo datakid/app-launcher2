@@ -1,536 +1,544 @@
+code
+Html
+play_circle
+download
+content_copy
+expand_less
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>LinkExpress Launcher</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-:root {
---bg-void: #000000;
---surface: rgba(18, 18, 22, 0.65);
---surface-hover: rgba(255, 255, 255, 0.08);
---surface-active: rgba(255, 255, 255, 0.12);
---border: rgba(255, 255, 255, 0.08);
---border-light: rgba(255, 255, 255, 0.15);
---accent: #9d8bfa;
---accent-glow: rgba(157, 139, 250, 0.3);
---text-main: #ffffff;
---text-sec: #a1a1aa;
---text-mut: #52525b;
---font-ui: 'Geist', system-ui, sans-serif;
---font-mono: 'JetBrains Mono', monospace;
---spring: cubic-bezier(0.175, 0.885, 0.32, 1.1);
---ease: cubic-bezier(0.16, 1, 0.3, 1);
-}
-*, *::before, *::after { 
-        margin: 0; 
-        padding: 0; 
-        box-sizing: border-box; 
-        -webkit-font-smoothing: antialiased; 
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LinkExpress Launcher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-void: #000000;
+            --surface: rgba(18, 18, 22, 0.65);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --surface-active: rgba(255, 255, 255, 0.12);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-light: rgba(255, 255, 255, 0.15);
+            --accent: #9d8bfa;
+            --accent-glow: rgba(157, 139, 250, 0.3);
+            --text-main: #ffffff;
+            --text-sec: #a1a1aa;
+            --text-mut: #52525b;
+            --font-ui: 'Geist', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --spring: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    body {
-        background-color: var(--bg-void);
-        font-family: var(--font-ui);
-        color: var(--text-main);
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        position: relative;
-    }
+        *, *::before, *::after { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-font-smoothing: antialiased; 
+        }
 
-    .ambient {
-        position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
-        background: radial-gradient(circle at 50% 0%, rgba(20, 15, 40, 0.6) 0%, transparent 75%);
-    }
-    
-    .blob {
-        position: absolute; filter: blur(100px); border-radius: 50%;
-        animation: drift 20s infinite alternate var(--ease);
-        will-change: transform;
-        transform: translateZ(0);
-    }
-    
-    .blob.primary { width: 700px; height: 700px; background: rgba(88, 50, 200, 0.18); top: -25%; left: -10%; }
-    .blob.secondary { width: 600px; height: 600px; background: rgba(30, 90, 150, 0.15); bottom: -25%; right: -10%; animation-delay: -10s; }
+        body {
+            background-color: var(--bg-void);
+            font-family: var(--font-ui);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
 
-    @keyframes drift {
-        0% { transform: translate3d(0, 0, 0) scale(1); }
-        100% { transform: translate3d(100px, 80px, 0) scale(1.15); }
-    }
+        .ambient {
+            position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+            background: radial-gradient(circle at 50% 0%, rgba(20, 15, 40, 0.6) 0%, transparent 75%);
+        }
+        
+        .blob {
+            position: absolute; filter: blur(100px); border-radius: 50%;
+            animation: drift 20s infinite alternate var(--ease);
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        
+        .blob.primary { width: 700px; height: 700px; background: rgba(88, 50, 200, 0.18); top: -25%; left: -10%; }
+        .blob.secondary { width: 600px; height: 600px; background: rgba(30, 90, 150, 0.15); bottom: -25%; right: -10%; animation-delay: -10s; }
 
-    body::after {
-        content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        opacity: 0.03; mix-blend-mode: overlay;
-    }
+        @keyframes drift {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(100px, 80px, 0) scale(1.15); }
+        }
 
-    .launcher {
-        position: relative; z-index: 10;
-        width: 1440px; height: 860px; max-width: 98vw; max-height: 96vh;
-        background: var(--surface);
-        backdrop-filter: blur(80px) saturate(200%);
-        -webkit-backdrop-filter: blur(80px) saturate(200%);
-        border: 1px solid var(--border);
-        border-radius: 28px;
-        box-shadow: 
-            0 0 0 1px rgba(0,0,0,0.9),
-            0 50px 100px -20px rgba(0,0,0,0.9),
-            inset 0 1px 1px rgba(255,255,255,0.1);
-        display: flex; overflow: hidden;
-        transform: scale(0.98) translateY(10px) translateZ(0); opacity: 0;
-        animation: boot 0.4s var(--ease) forwards;
-        will-change: transform, opacity;
-    }
+        body::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03; mix-blend-mode: overlay;
+        }
 
-    @keyframes boot {
-        to { transform: scale(1) translateY(0) translateZ(0); opacity: 1; }
-    }
+        .launcher {
+            position: relative; z-index: 10;
+            width: 1440px; height: 860px; max-width: 98vw; max-height: 96vh;
+            background: var(--surface);
+            backdrop-filter: blur(80px) saturate(200%);
+            -webkit-backdrop-filter: blur(80px) saturate(200%);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            box-shadow: 
+                0 0 0 1px rgba(0,0,0,0.9),
+                0 50px 100px -20px rgba(0,0,0,0.9),
+                inset 0 1px 1px rgba(255,255,255,0.1);
+            display: flex; overflow: hidden;
+            transform: scale(0.98) translateY(10px) translateZ(0); opacity: 0;
+            animation: boot 0.4s var(--ease) forwards;
+            will-change: transform, opacity;
+        }
 
-    .sidebar {
-        width: 380px; flex-shrink: 0; display: flex; flex-direction: column;
-        border-right: 1px solid var(--border); background: rgba(0,0,0,0.4);
-        position: relative; z-index: 2;
-    }
+        @keyframes boot {
+            to { transform: scale(1) translateY(0) translateZ(0); opacity: 1; }
+        }
 
-    .search-box {
-        padding: 32px 28px 24px; position: relative;
-    }
-    
-    .search-box i {
-        position: absolute; left: 30px; top: 37px; font-size: 20px;
-        color: var(--text-mut); transition: color 0.2s var(--ease);
-    }
+        .sidebar {
+            width: 380px; flex-shrink: 0; display: flex; flex-direction: column;
+            border-right: 1px solid var(--border); background: rgba(0,0,0,0.4);
+            position: relative; z-index: 2;
+        }
 
-    #search {
-        width: 100%; background: transparent; border: none; outline: none;
-        color: var(--text-main); font-family: var(--font-ui); font-size: 24px; font-weight: 400;
-        padding: 0 0 0 42px; height: 32px;
-    }
-    
-    #search::placeholder { color: var(--text-mut); font-weight: 300; }
-    .search-box:focus-within i { color: var(--accent); }
+        .search-box {
+            padding: 32px 28px 24px; position: relative;
+        }
+        
+        .search-box i {
+            position: absolute; left: 30px; top: 37px; font-size: 20px;
+            color: var(--text-mut); transition: color 0.2s var(--ease);
+        }
 
-    .list-header {
-        padding: 0 28px 14px; font-family: var(--font-mono); font-size: 12px;
-        color: var(--text-mut); text-transform: uppercase; letter-spacing: 0.12em;
-        display: flex; justify-content: space-between; align-items: center;
-    }
+        #search {
+            width: 100%; background: transparent; border: none; outline: none;
+            color: var(--text-main); font-family: var(--font-ui); font-size: 24px; font-weight: 400;
+            padding: 0 0 0 42px; height: 32px;
+        }
+        
+        #search::placeholder { color: var(--text-mut); font-weight: 300; }
+        .search-box:focus-within i { color: var(--accent); }
 
-    .scroll-area {
-        flex: 1; overflow-y: auto; padding: 0 20px 20px; position: relative;
-    }
-    
-    .scroll-area::-webkit-scrollbar { display: none; }
+        .list-header {
+            padding: 0 28px 14px; font-family: var(--font-mono); font-size: 12px;
+            color: var(--text-mut); text-transform: uppercase; letter-spacing: 0.12em;
+            display: flex; justify-content: space-between; align-items: center;
+        }
 
-    .app-list { list-style: none; position: relative; display: flex; flex-direction: column; gap: 6px; }
+        .scroll-area {
+            flex: 1; overflow-y: auto; padding: 0 20px 20px; position: relative;
+        }
+        
+        .scroll-area::-webkit-scrollbar { display: none; }
 
-    .active-pill {
-        position: absolute; left: 0; right: 0; height: 60px;
-        background: var(--surface-active); border: 1px solid var(--border-light);
-        border-radius: 16px; pointer-events: none; z-index: 0;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-        transition: transform 0.25s var(--ease), opacity 0.2s var(--ease);
-        opacity: 0; will-change: transform, opacity; transform: translateZ(0);
-    }
-    
-    .active-pill::before {
-        content:''; position:absolute; top:25%; bottom:25%; left:-1px; width:4px;
-        background: var(--accent); border-radius: 0 4px 4px 0;
-        box-shadow: 0 0 16px var(--accent-glow);
-    }
+        .app-list { list-style: none; position: relative; display: flex; flex-direction: column; gap: 6px; }
 
-    .app-item {
-        display: flex; align-items: center; gap: 18px; padding: 0 16px; height: 60px;
-        border-radius: 16px; cursor: pointer; position: relative; z-index: 1;
-        transition: opacity 0.2s var(--ease);
-    }
+        .active-pill {
+            position: absolute; left: 0; right: 0; height: 60px;
+            background: var(--surface-active); border: 1px solid var(--border-light);
+            border-radius: 16px; pointer-events: none; z-index: 0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: transform 0.25s var(--ease), opacity 0.2s var(--ease);
+            opacity: 0; will-change: transform, opacity; transform: translateZ(0);
+        }
+        
+        .active-pill::before {
+            content:''; position:absolute; top:25%; bottom:25%; left:-1px; width:4px;
+            background: var(--accent); border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
 
-    .app-item .icon-wrapper {
-        width: 36px; height: 36px; border-radius: 12px; background: rgba(255,255,255,0.03);
-        border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-        font-size: 15px; color: var(--text-sec); 
-        transition: transform 0.25s var(--spring), background 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s;
-        will-change: transform; transform: translateZ(0);
-    }
-    
-    .app-item.active .icon-wrapper {
-        background: var(--text-main); color: var(--bg-void); transform: scale(1.1) translateZ(0);
-        box-shadow: 0 6px 20px var(--accent-glow); border-color: transparent;
-    }
+        .app-item {
+            display: flex; align-items: center; gap: 18px; padding: 0 16px; height: 60px;
+            border-radius: 16px; cursor: pointer; position: relative; z-index: 1;
+            transition: opacity 0.2s var(--ease);
+        }
 
-    .app-item .name {
-        flex: 1; font-size: 16px; font-weight: 400; color: var(--text-sec);
-        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        transition: color 0.2s var(--ease);
-    }
-    
-    .app-item.active .name { color: var(--text-main); font-weight: 500; }
+        .app-item .icon-wrapper {
+            width: 36px; height: 36px; border-radius: 12px; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+            font-size: 15px; color: var(--text-sec); 
+            transition: transform 0.25s var(--spring), background 0.2s, color 0.2s, box-shadow 0.2s, border-color 0.2s;
+            will-change: transform; transform: translateZ(0);
+        }
+        
+        .app-item.active .icon-wrapper {
+            background: var(--text-main); color: var(--bg-void); transform: scale(1.1) translateZ(0);
+            box-shadow: 0 6px 20px var(--accent-glow); border-color: transparent;
+        }
 
-    .shortcut {
-        display: flex; align-items: center; gap: 6px; opacity: 0; transform: translateX(10px) translateZ(0);
-        transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
-        will-change: transform, opacity;
-    }
-    
-    .app-item.active .shortcut { opacity: 1; transform: translateX(0) translateZ(0); }
-    
-    kbd {
-        font-family: var(--font-mono); font-size: 12px; color: var(--text-mut);
-        background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-        border-radius: 6px; padding: 4px 8px; box-shadow: 0 2px 0 rgba(0,0,0,0.4);
-        transition: color 0.2s, border-color 0.2s;
-    }
-    
-    .app-item.active kbd { color: var(--text-sec); border-color: var(--border-light); }
+        .app-item .name {
+            flex: 1; font-size: 16px; font-weight: 400; color: var(--text-sec);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            transition: color 0.2s var(--ease);
+        }
+        
+        .app-item.active .name { color: var(--text-main); font-weight: 500; }
 
-    .empty-state { text-align: center; padding: 80px 20px; font-family: var(--font-mono); font-size: 14px; color: var(--text-mut); }
+        .shortcut {
+            display: flex; align-items: center; gap: 6px; opacity: 0; transform: translateX(10px) translateZ(0);
+            transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
+            will-change: transform, opacity;
+        }
+        
+        .app-item.active .shortcut { opacity: 1; transform: translateX(0) translateZ(0); }
+        
+        kbd {
+            font-family: var(--font-mono); font-size: 12px; color: var(--text-mut);
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            border-radius: 6px; padding: 4px 8px; box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+            transition: color 0.2s, border-color 0.2s;
+        }
+        
+        .app-item.active kbd { color: var(--text-sec); border-color: var(--border-light); }
 
-    .footer {
-        padding: 20px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
-        background: rgba(0,0,0,0.3);
-    }
-    
-    .logo { font-size: 13px; font-weight: 600; color: var(--text-sec); letter-spacing: 0.1em; display: flex; align-items: center; gap: 12px; }
-    .logo i { color: var(--accent); font-size: 16px; filter: drop-shadow(0 0 10px var(--accent-glow)); }
-    .hint { font-family: var(--font-mono); font-size: 12px; color: var(--text-mut); }
+        .empty-state { text-align: center; padding: 80px 20px; font-family: var(--font-mono); font-size: 14px; color: var(--text-mut); }
 
-    .preview { flex: 1; display: flex; flex-direction: column; position: relative; background: #000; overflow: hidden; }
+        .footer {
+            padding: 20px 28px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+            background: rgba(0,0,0,0.3);
+        }
+        
+        .logo { font-size: 13px; font-weight: 600; color: var(--text-sec); letter-spacing: 0.1em; display: flex; align-items: center; gap: 12px; }
+        .logo i { color: var(--accent); font-size: 16px; filter: drop-shadow(0 0 10px var(--accent-glow)); }
+        .hint { font-family: var(--font-mono); font-size: 12px; color: var(--text-mut); }
 
-    .topbar {
-        height: 68px; padding: 0 28px; border-bottom: 1px solid rgba(255,255,255,0.06);
-        display: flex; align-items: center; gap: 24px; background: rgba(10,10,12,0.95); z-index: 20;
-        backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-    }
-    
-    .dots { display: flex; gap: 8px; }
-    .dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.9; }
-    .dot.r { background: #ff5f56; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3); }
-    .dot.y { background: #ffbd2e; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3); }
-    .dot.g { background: #27c93f; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3); }
+        .preview { flex: 1; display: flex; flex-direction: column; position: relative; background: #000; overflow: hidden; }
 
-    .url-box {
-        flex: 1; height: 40px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 12px; display: flex; align-items: center; padding: 0 16px; gap: 12px;
-        transition: background 0.2s var(--ease);
-    }
-    
-    .url-box:hover { background: rgba(255,255,255,0.07); }
-    .url-box i { font-size: 12px; color: var(--text-mut); }
-    .url-text { font-family: var(--font-mono); font-size: 13px; color: var(--text-sec); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .topbar {
+            height: 68px; padding: 0 28px; border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex; align-items: center; gap: 24px; background: rgba(10,10,12,0.95); z-index: 20;
+            backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        }
+        
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; opacity: 0.9; }
+        .dot.r { background: #ff5f56; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3); }
+        .dot.y { background: #ffbd2e; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3); }
+        .dot.g { background: #27c93f; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.3); }
 
-    .btn-launch {
-        height: 40px; padding: 0 20px; border-radius: 12px; background: var(--text-main); color: var(--bg-void);
-        font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 10px;
-        transition: transform 0.25s var(--spring), box-shadow 0.25s var(--ease);
-        will-change: transform; transform: translateZ(0);
-    }
-    
-    .btn-launch:hover { transform: scale(1.05) translateZ(0); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
+        .url-box {
+            flex: 1; height: 40px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px; display: flex; align-items: center; padding: 0 16px; gap: 12px;
+            transition: background 0.2s var(--ease);
+        }
+        
+        .url-box:hover { background: rgba(255,255,255,0.07); }
+        .url-box i { font-size: 12px; color: var(--text-mut); }
+        .url-text { font-family: var(--font-mono); font-size: 13px; color: var(--text-sec); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .frame-wrapper { flex: 1; position: relative; overflow: hidden; background: var(--bg-void); }
-    
-    .loader-overlay {
-        position: absolute; inset: 0; z-index: 15; display: flex; flex-direction: column;
-        align-items: center; justify-content: center; background: var(--bg-void);
-        transition: opacity 0.25s var(--ease), visibility 0.25s var(--ease);
-    }
-    
-    .loader-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    
-    .spinner {
-        width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.06);
-        border-top-color: var(--accent); border-radius: 50%;
-        animation: spin 0.7s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; margin-bottom: 24px;
-    }
-    
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    
-    .loader-label { font-family: var(--font-mono); font-size: 13px; color: var(--text-mut); letter-spacing: 0.18em; }
+        .btn-launch {
+            height: 40px; padding: 0 20px; border-radius: 12px; background: var(--text-main); color: var(--bg-void);
+            font-size: 14px; font-weight: 500; text-decoration: none; display: flex; align-items: center; gap: 10px;
+            transition: transform 0.25s var(--spring), box-shadow 0.25s var(--ease);
+            will-change: transform; transform: translateZ(0);
+        }
+        
+        .btn-launch:hover { transform: scale(1.05) translateZ(0); box-shadow: 0 8px 24px rgba(255,255,255,0.25); }
 
-    iframe {
-        position: absolute; inset: 0; width: 100%; height: 100%; border: none; background: #fff;
-        opacity: 0; transform: scale(0.99) translateY(8px) translateZ(0); 
-        transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
-        pointer-events: none; z-index: 5; will-change: transform, opacity;
-    }
-    
-    iframe.active { opacity: 1; transform: scale(1) translateY(0) translateZ(0); pointer-events: auto; z-index: 10; }
+        .frame-wrapper { flex: 1; position: relative; overflow: hidden; background: var(--bg-void); }
+        
+        .loader-overlay {
+            position: absolute; inset: 0; z-index: 15; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; background: var(--bg-void);
+            transition: opacity 0.25s var(--ease), visibility 0.25s var(--ease);
+        }
+        
+        .loader-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        
+        .spinner {
+            width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.06);
+            border-top-color: var(--accent); border-radius: 50%;
+            animation: spin 0.7s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite; margin-bottom: 24px;
+        }
+        
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .loader-label { font-family: var(--font-mono); font-size: 13px; color: var(--text-mut); letter-spacing: 0.18em; }
 
-    @media (max-width: 950px) {
-        .launcher { width: 100%; height: 100%; border-radius: 0; border: none; max-width: none; max-height: none; transform: none; animation: none; opacity: 1; }
-        .preview { display: none; } 
-        .sidebar { width: 100%; border-right: none; background: transparent; }
-        #search { font-size: 26px; height: 36px; } 
-        .app-item { height: 68px; padding: 0 24px; }
-        .active-pill { height: 68px; }
-        .shortcut { display: none; } 
-        .app-item .icon-wrapper { width: 42px; height: 42px; font-size: 18px; }
-        .app-item .name { font-size: 18px; }
-    }
-</style>
+        iframe {
+            position: absolute; inset: 0; width: 100%; height: 100%; border: none; background: #fff;
+            opacity: 0; transform: scale(0.99) translateY(8px) translateZ(0); 
+            transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+            pointer-events: none; z-index: 5; will-change: transform, opacity;
+        }
+        
+        iframe.active { opacity: 1; transform: scale(1) translateY(0) translateZ(0); pointer-events: auto; z-index: 10; }
+
+        @media (max-width: 950px) {
+            .launcher { width: 100%; height: 100%; border-radius: 0; border: none; max-width: none; max-height: none; transform: none; animation: none; opacity: 1; }
+            .preview { display: none; } 
+            .sidebar { width: 100%; border-right: none; background: transparent; }
+            #search { font-size: 26px; height: 36px; } 
+            .app-item { height: 68px; padding: 0 24px; }
+            .active-pill { height: 68px; }
+            .shortcut { display: none; } 
+            .app-item .icon-wrapper { width: 42px; height: 42px; font-size: 18px; }
+            .app-item .name { font-size: 18px; }
+        }
+    </style>
 </head>
 <body>
-<div class="ambient">
-    <div class="blob primary"></div>
-    <div class="blob secondary"></div>
-</div>
 
-<div class="launcher">
-    <div class="sidebar">
-        <div class="search-box">
-            <i class="fas fa-search"></i>
-            <input type="text" id="search" placeholder="Search apps..." autocomplete="off" spellcheck="false" autofocus>
-        </div>
-        
-        <div class="list-header">
-            <span>Applications</span>
-            <span id="counter">7</span>
-        </div>
+    <div class="ambient">
+        <div class="blob primary"></div>
+        <div class="blob secondary"></div>
+    </div>
 
-        <div class="scroll-area">
-            <div class="app-list" id="list">
-                <div class="active-pill" id="pill"></div>
+    <div class="launcher">
+        <div class="sidebar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search" placeholder="Search apps..." autocomplete="off" spellcheck="false" autofocus>
+            </div>
+            
+            <div class="list-header">
+                <span>Applications</span>
+                <span id="counter">7</span>
+            </div>
+
+            <div class="scroll-area">
+                <div class="app-list" id="list">
+                    <div class="active-pill" id="pill"></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="logo">
+                    <i class="fa-solid fa-bolt"></i>
+                    LINKEXPRESS
+                </div>
+                <div class="hint">
+                    <kbd>↵</kbd> to open
+                </div>
             </div>
         </div>
 
-        <div class="footer">
-            <div class="logo">
-                <i class="fa-solid fa-bolt"></i>
-                LINKEXPRESS
+        <div class="preview">
+            <div class="topbar">
+                <div class="dots">
+                    <div class="dot r"></div>
+                    <div class="dot y"></div>
+                    <div class="dot g"></div>
+                </div>
+                <div class="url-box">
+                    <i class="fas fa-lock"></i>
+                    <span class="url-text" id="url-display">about:blank</span>
+                </div>
+                <a href="#" target="_blank" class="btn-launch" id="btn-launch">
+                    Open <i class="fas fa-external-link-alt" style="font-size: 12px;"></i>
+                </a>
             </div>
-            <div class="hint">
-                <kbd>↵</kbd> to open
+            
+            <div class="frame-wrapper" id="frame-wrapper">
+                <div class="loader-overlay" id="loader">
+                    <div class="spinner"></div>
+                    <div class="loader-label" id="loader-label">INITIALIZING</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="preview">
-        <div class="topbar">
-            <div class="dots">
-                <div class="dot r"></div>
-                <div class="dot y"></div>
-                <div class="dot g"></div>
-            </div>
-            <div class="url-box">
-                <i class="fas fa-lock"></i>
-                <span class="url-text" id="url-display">about:blank</span>
-            </div>
-            <a href="#" target="_blank" class="btn-launch" id="btn-launch">
-                Open <i class="fas fa-external-link-alt" style="font-size: 12px;"></i>
-            </a>
-        </div>
-        
-        <div class="frame-wrapper" id="frame-wrapper">
-            <div class="loader-overlay" id="loader">
-                <div class="spinner"></div>
-                <div class="loader-label" id="loader-label">INITIALIZING</div>
-            </div>
-        </div>
-    </div>
-</div>
+    <script>
+        const apps = [
+            { name: "خارجي قوي عاملة", url: "https://datakid-github-io.vercel.app/", icon: "fa-briefcase-medical", key: "1" },
+            { name: "خارجي طلاب", url: "https://datakid2.vercel.app/", icon: "fa-graduation-cap", key: "2" },
+            { name: "مجموعات دوائية", url: "https://desktop-ru4x.vercel.app/", icon: "fa-pills", key: "3" },
+            { name: "لستة الادوية", url: "https://searchbar-five-beta.vercel.app/", icon: "fa-search", key: "4" },
+            { name: "المنفذ والتحمل", url: "https://newlist2.vercel.app/", icon: "fa-dollar-sign", key: "5" },
+            { name: "بروتوكولات التأمين", url: "https://protocols-one.vercel.app/", icon: "fa-folder-open", key: "6" },
+            { name: "بيانات الخارجي", url: "https://simpledashboard21.netlify.app/", icon: "fa-eye", key: "7" }
+        ];
 
-<script>
-    const apps = [
-        { name: "خارجي قوي عاملة", url: "https://datakid-github-io.vercel.app/", icon: "fa-briefcase-medical", key: "1" },
-        { name: "خارجي طلاب", url: "https://datakid2.vercel.app/", icon: "fa-graduation-cap", key: "2" },
-        { name: "مجموعات دوائية", url: "https://desktop-ru4x.vercel.app/", icon: "fa-pills", key: "3" },
-        { name: "لستة الادوية", url: "https://searchbar-five-beta.vercel.app/", icon: "fa-search", key: "4" },
-        { name: "المنفذ والتحمل", url: "https://newlist2.vercel.app/", icon: "fa-dollar-sign", key: "5" },
-        { name: "بروتوكولات التأمين", url: "https://protocols-one.vercel.app/", icon: "fa-folder-open", key: "6" },
-        { name: "بيانات الخارجي", url: "https://simpledashboard21.netlify.app/", icon: "fa-eye", key: "7" }
-    ];
+        const listEl = document.getElementById('list');
+        const searchEl = document.getElementById('search');
+        const pillEl = document.getElementById('pill');
+        const loaderEl = document.getElementById('loader');
+        const urlDisplayEl = document.getElementById('url-display');
+        const btnLaunchEl = document.getElementById('btn-launch');
+        const loaderLabelEl = document.getElementById('loader-label');
+        const counterEl = document.getElementById('counter');
+        const frameWrapper = document.getElementById('frame-wrapper');
 
-    const listEl = document.getElementById('list');
-    const searchEl = document.getElementById('search');
-    const pillEl = document.getElementById('pill');
-    const loaderEl = document.getElementById('loader');
-    const urlDisplayEl = document.getElementById('url-display');
-    const btnLaunchEl = document.getElementById('btn-launch');
-    const loaderLabelEl = document.getElementById('loader-label');
-    const counterEl = document.getElementById('counter');
-    const frameWrapper = document.getElementById('frame-wrapper');
+        let filteredApps = [...apps];
+        let selectedIndex = 0;
+        let itemNodes = [];
+        const iframePool = {};
+        let loadTimer = null;
 
-    let filteredApps = [...apps];
-    let selectedIndex = 0;
-    let itemNodes = [];
-    const iframePool = {};
+        function renderList() {
+            itemNodes.forEach(node => node.remove());
+            itemNodes = [];
+            const empty = listEl.querySelector('.empty-state');
+            if(empty) empty.remove();
 
-    function renderList() {
-        itemNodes.forEach(node => node.remove());
-        itemNodes = [];
-        const empty = listEl.querySelector('.empty-state');
-        if(empty) empty.remove();
+            if (filteredApps.length === 0) {
+                const div = document.createElement('div');
+                div.className = 'empty-state';
+                div.innerHTML = '<i class="fas fa-ghost" style="font-size:32px; margin-bottom:18px; opacity:0.3;"></i><br>No applications found.';
+                listEl.appendChild(div);
+                pillEl.style.opacity = '0';
+                counterEl.textContent = '0';
+                return;
+            }
 
-        if (filteredApps.length === 0) {
-            const div = document.createElement('div');
-            div.className = 'empty-state';
-            div.innerHTML = '<i class="fas fa-ghost" style="font-size:32px; margin-bottom:18px; opacity:0.3;"></i><br>No applications found.';
-            listEl.appendChild(div);
-            pillEl.style.opacity = '0';
-            counterEl.textContent = '0';
-            return;
-        }
+            counterEl.textContent = filteredApps.length;
+            const fragment = document.createDocumentFragment();
 
-        counterEl.textContent = filteredApps.length;
+            filteredApps.forEach((app, index) => {
+                const li = document.createElement('div');
+                li.className = `app-item ${index === selectedIndex ? 'active' : ''}`;
+                li.innerHTML = `
+                    <div class="icon-wrapper"><i class="fas ${app.icon}"></i></div>
+                    <div class="name" dir="auto">${app.name}</div>
+                    <div class="shortcut"><kbd>⌘</kbd><kbd>${app.key}</kbd></div>
+                `;
+                
+                li.addEventListener('mouseenter', () => {
+                    if(selectedIndex !== index) {
+                        selectedIndex = index;
+                        updateSelection();
+                    }
+                });
 
-        const fragment = document.createDocumentFragment();
+                li.addEventListener('click', () => {
+                    window.open(app.url, '_blank');
+                });
 
-        filteredApps.forEach((app, index) => {
-            const li = document.createElement('div');
-            li.className = `app-item ${index === selectedIndex ? 'active' : ''}`;
-            li.innerHTML = `
-                <div class="icon-wrapper"><i class="fas ${app.icon}"></i></div>
-                <div class="name" dir="auto">${app.name}</div>
-                <div class="shortcut"><kbd>⌘</kbd><kbd>${app.key}</kbd></div>
-            `;
-            
-            li.addEventListener('mouseenter', () => {
-                if(selectedIndex !== index) {
-                    selectedIndex = index;
-                    updateSelection();
-                }
+                fragment.appendChild(li);
+                itemNodes.push(li);
             });
 
-            li.addEventListener('click', () => {
-                window.open(app.url, '_blank');
+            listEl.appendChild(fragment);
+            updateSelection(); 
+        }
+
+        function updateSelection() {
+            if (filteredApps.length === 0) return;
+
+            itemNodes.forEach((node, idx) => {
+                node.classList.toggle('active', idx === selectedIndex);
             });
 
-            fragment.appendChild(li);
-            itemNodes.push(li);
-        });
-
-        listEl.appendChild(fragment);
-        updateSelection(); 
-    }
-
-    function updateSelection() {
-        if (filteredApps.length === 0) return;
-
-        itemNodes.forEach((node, idx) => {
-            node.classList.toggle('active', idx === selectedIndex);
-        });
-
-        const activeNode = itemNodes[selectedIndex];
-        if (activeNode) {
-            pillEl.style.opacity = '1';
-            pillEl.style.transform = `translateY(${activeNode.offsetTop}px) translateZ(0)`;
-            activeNode.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
-
-        if (window.innerWidth > 950) {
-            triggerPreview(filteredApps[selectedIndex]);
-        }
-    }
-
-    function triggerPreview(app) {
-        if (!app) return;
-        
-        urlDisplayEl.textContent = app.url;
-        btnLaunchEl.href = app.url;
-        loaderLabelEl.textContent = `LOADING ${app.name.toUpperCase()}`;
-        
-        Object.values(iframePool).forEach(iframe => {
-            iframe.classList.remove('active');
-        });
-
-        if (!iframePool[app.url]) {
-            loaderEl.classList.remove('hidden');
-            
-            const iframe = document.createElement('iframe');
-            iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
-            iframe.src = app.url;
-            
-            iframe.onload = () => {
-                iframe.dataset.loaded = "true";
-                if (urlDisplayEl.textContent === app.url) {
-                    loaderEl.classList.add('hidden');
-                }
-            };
-            
-            frameWrapper.appendChild(iframe);
-            iframePool[app.url] = iframe;
-        } else {
-            if (iframePool[app.url].dataset.loaded === "true") {
-                loaderEl.classList.add('hidden');
-            } else {
-                loaderEl.classList.remove('hidden');
-            }
-        }
-
-        requestAnimationFrame(() => {
-            if(iframePool[app.url]) {
-                iframePool[app.url].classList.add('active');
-            }
-        });
-    }
-
-    searchEl.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        filteredApps = apps.filter(app => 
-            app.name.toLowerCase().includes(query) || 
-            app.url.toLowerCase().includes(query)
-        );
-        selectedIndex = 0;
-        renderList();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-            e.preventDefault();
-            searchEl.focus();
-            return;
-        }
-
-        if ((e.metaKey || e.ctrlKey) && /^[1-7]$/.test(e.key)) {
-            const targetApp = apps.find(a => a.key === e.key);
-            if(targetApp) {
-                e.preventDefault();
-                window.open(targetApp.url, '_blank');
-            }
-            return;
-        }
-
-        if (filteredApps.length === 0) return;
-
-        switch(e.key) {
-            case 'ArrowDown':
-                e.preventDefault();
-                selectedIndex = (selectedIndex + 1) % filteredApps.length;
-                updateSelection();
-                break;
-            case 'ArrowUp':
-                e.preventDefault();
-                selectedIndex = (selectedIndex - 1 + filteredApps.length) % filteredApps.length;
-                updateSelection();
-                break;
-            case 'Enter':
-                e.preventDefault();
-                window.open(filteredApps[selectedIndex].url, '_blank');
-                break;
-        }
-    });
-
-    window.addEventListener('resize', () => {
-        if (filteredApps.length > 0) {
             const activeNode = itemNodes[selectedIndex];
             if (activeNode) {
-                pillEl.style.transition = 'none';
+                pillEl.style.opacity = '1';
                 pillEl.style.transform = `translateY(${activeNode.offsetTop}px) translateZ(0)`;
-                void pillEl.offsetWidth;
-                pillEl.style.transition = 'transform 0.25s var(--ease), opacity 0.2s var(--ease)';
+                activeNode.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
+
+            if (window.innerWidth > 950) {
+                triggerPreview(filteredApps[selectedIndex]);
             }
         }
-    });
 
-    renderList();
-</script>
+        function triggerPreview(app) {
+            if (!app) return;
+            
+            urlDisplayEl.textContent = app.url;
+            btnLaunchEl.href = app.url;
+            loaderLabelEl.textContent = `LOADING ${app.name.toUpperCase()}`;
+            
+            Object.values(iframePool).forEach(iframe => {
+                iframe.classList.remove('active');
+            });
+            
+            loaderEl.classList.remove('hidden');
+
+            clearTimeout(loadTimer);
+            
+            loadTimer = setTimeout(() => {
+                if (!iframePool[app.url]) {
+                    const iframe = document.createElement('iframe');
+                    iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
+                    iframe.loading = "lazy";
+                    iframe.src = app.url;
+                    
+                    iframe.onload = () => {
+                        iframe.dataset.loaded = "true";
+                        if (urlDisplayEl.textContent === app.url) {
+                            loaderEl.classList.add('hidden');
+                        }
+                    };
+                    
+                    frameWrapper.appendChild(iframe);
+                    iframePool[app.url] = iframe;
+                } else if (iframePool[app.url].dataset.loaded === "true") {
+                    loaderEl.classList.add('hidden');
+                }
+
+                requestAnimationFrame(() => {
+                    if(iframePool[app.url]) {
+                        iframePool[app.url].classList.add('active');
+                    }
+                });
+            }, 250);
+        }
+
+        searchEl.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            filteredApps = apps.filter(app => 
+                app.name.toLowerCase().includes(query) || 
+                app.url.toLowerCase().includes(query)
+            );
+            selectedIndex = 0;
+            renderList();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                searchEl.focus();
+                return;
+            }
+
+            if ((e.metaKey || e.ctrlKey) && /^[1-7]$/.test(e.key)) {
+                const targetApp = apps.find(a => a.key === e.key);
+                if(targetApp) {
+                    e.preventDefault();
+                    window.open(targetApp.url, '_blank');
+                }
+                return;
+            }
+
+            if (filteredApps.length === 0) return;
+
+            switch(e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex + 1) % filteredApps.length;
+                    updateSelection();
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    selectedIndex = (selectedIndex - 1 + filteredApps.length) % filteredApps.length;
+                    updateSelection();
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    window.open(filteredApps[selectedIndex].url, '_blank');
+                    break;
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (filteredApps.length > 0) {
+                const activeNode = itemNodes[selectedIndex];
+                if (activeNode) {
+                    pillEl.style.transition = 'none';
+                    pillEl.style.transform = `translateY(${activeNode.offsetTop}px) translateZ(0)`;
+                    void pillEl.offsetWidth;
+                    pillEl.style.transition = 'transform 0.25s var(--ease), opacity 0.2s var(--ease)';
+                }
+            }
+        });
+
+        renderList();
+    </script>
 </body>
 </html>
