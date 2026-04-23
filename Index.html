@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -11,31 +10,28 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root {
---bg-void: #050505;
---surface: rgba(18, 18, 20, 0.75);
---surface-hover: rgba(255, 255, 255, 0.03);
---surface-active: rgba(255, 255, 255, 0.06);
---sidebar-bg: rgba(10, 10, 12, 0.4);
---topbar-bg: rgba(12, 12, 14, 0.85);
---border: rgba(255, 255, 255, 0.06);
---border-light: rgba(255, 255, 255, 0.1);
---accent: #a78bfa;
---accent-glow: rgba(167, 139, 250, 0.5);
---text-main: #f4f4f5;
---text-sec: #a1a1aa;
---text-mut: #52525b;
---pill-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
+    --bg-void: #050505;
+    --surface: rgba(18, 18, 20, 0.75);
+    --surface-hover: rgba(255, 255, 255, 0.03);
+    --surface-active: rgba(255, 255, 255, 0.06);
+    --sidebar-bg: rgba(10, 10, 12, 0.4);
+    --topbar-bg: rgba(12, 12, 14, 0.85);
+    --border: rgba(255, 255, 255, 0.06);
+    --border-light: rgba(255, 255, 255, 0.1);
+    --accent: #a78bfa;
+    --accent-glow: rgba(167, 139, 250, 0.5);
+    --text-main: #f4f4f5;
+    --text-sec: #a1a1aa;
+    --text-mut: #52525b;
+    --pill-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.05);
     --pill-indicator-w: 4px;
     --pill-indicator-glow: 0 0 16px var(--accent-glow);
-    
     --icon-bg: rgba(255,255,255,0.02);
     --icon-bg-active: var(--text-main);
     --icon-color-active: var(--bg-void);
     --icon-shadow: 0 8px 20px rgba(255,255,255,0.15);
-    
     --ambient-opacity: 1;
     --launcher-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 60px 120px -20px rgba(0,0,0,1), inset 0 1px 2px rgba(255,255,255,0.1);
-    
     --font-ui: 'Geist', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     --spring: cubic-bezier(0.175, 0.885, 0.32, 1.15);
@@ -57,16 +53,13 @@
     --text-main: #ffffff;
     --text-sec: #ebebf5;
     --text-mut: #ebebf54d;
-    
     --pill-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), 0 4px 12px rgba(0,0,0,0.2);
     --pill-indicator-w: 3px;
     --pill-indicator-glow: none;
-    
     --icon-bg: transparent;
     --icon-bg-active: transparent;
     --icon-color-active: var(--text-main);
     --icon-shadow: none;
-    
     --ambient-opacity: 0;
     --launcher-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 40px 80px rgba(0,0,0,0.8);
 }
@@ -389,6 +382,9 @@ iframe.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: a
             LINKEXPRESS
         </div>
         <div class="footer-controls">
+            <button id="sound-toggle" class="theme-toggle" title="Toggle Sound">
+                <i class="fas fa-volume-xmark"></i>
+            </button>
             <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
                 <i class="fas fa-palette"></i>
             </button>
@@ -431,7 +427,7 @@ iframe.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: a
 </div>
 
 <script>
-const apps =[
+const apps = [
 { name: "خارجي 1", url: "https://datakid-github-io.vercel.app/", icon: "fa-briefcase-medical", key: "1" },
 { name: "خارجي 3", url: "https://datakid2.vercel.app/", icon: "fa-graduation-cap", key: "2" },
 { name: "مجموعات دوائية", url: "https://desktop-ru4x.vercel.app/", icon: "fa-pills", key: "3" },
@@ -441,6 +437,87 @@ const apps =[
 { name: "بيانات الخارجي", url: "https://simpledashboard21.netlify.app/", icon: "fa-eye", key: "7" },
 { name: "فهرس الادوية", url: "https://lx-index.vercel.app/", icon: "fa-book-open", key: "8" }
 ];
+
+const SoundEngine = {
+    ctx: null,
+    enabled: false,
+    init() {
+        if (!this.ctx) {
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    },
+    toggle() {
+        this.enabled = !this.enabled;
+        if (this.enabled) this.init();
+        return this.enabled;
+    },
+    playHover() {
+        if (!this.enabled || !this.ctx) return;
+        const isRaycast = document.body.getAttribute('data-theme') === 'raycast';
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        if (isRaycast) {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(80, t);
+            gain.gain.setValueAtTime(0.015, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.015);
+            osc.start(t);
+            osc.stop(t + 0.015);
+        } else {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200, t);
+            osc.frequency.exponentialRampToValueAtTime(800, t + 0.04);
+            gain.gain.setValueAtTime(0.02, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            osc.start(t);
+            osc.stop(t + 0.04);
+        }
+    },
+    playClick() {
+        if (!this.enabled || !this.ctx) return;
+        const isRaycast = document.body.getAttribute('data-theme') === 'raycast';
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        if (isRaycast) {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, t);
+            osc.frequency.exponentialRampToValueAtTime(40, t + 0.04);
+            gain.gain.setValueAtTime(0.04, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            osc.start(t);
+            osc.stop(t + 0.04);
+        } else {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(600, t);
+            osc.frequency.exponentialRampToValueAtTime(300, t + 0.08);
+            gain.gain.setValueAtTime(0.04, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+            
+            const osc2 = this.ctx.createOscillator();
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1200, t);
+            osc2.connect(gain);
+            osc2.start(t);
+            osc2.stop(t + 0.08);
+            
+            osc.start(t);
+            osc.stop(t + 0.08);
+        }
+    }
+};
 
 const listEl = document.getElementById('list');
 const searchEl = document.getElementById('search');
@@ -454,269 +531,302 @@ const loaderLabelEl = document.getElementById('loader-label');
 const counterEl = document.getElementById('counter');
 const frameWrapper = document.getElementById('frame-wrapper');
 const themeToggleBtn = document.getElementById('theme-toggle');
+const soundToggleBtn = document.getElementById('sound-toggle');
 
-let filteredApps =[...apps];
+let filteredApps = [...apps];
 let selectedIndex = 0;
-let itemNodes =[];
+let lastSoundIndex = -1;
+let itemNodes = [];
 const iframePool = {};
 let loadTimer = null;
 let artificialDelayTimer = null;
 
+const interactiveElements = [themeToggleBtn, soundToggleBtn, btnLaunchEl, btnRefreshEl];
+interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => SoundEngine.playHover());
+    el.addEventListener('mousedown', () => SoundEngine.playClick());
+});
+
+clearSearchEl.addEventListener('mouseenter', () => {
+    if (clearSearchEl.classList.contains('visible')) SoundEngine.playHover();
+});
+clearSearchEl.addEventListener('mousedown', () => {
+    if (clearSearchEl.classList.contains('visible')) SoundEngine.playClick();
+});
+
+soundToggleBtn.addEventListener('click', () => {
+    const isEnabled = SoundEngine.toggle();
+    const icon = soundToggleBtn.querySelector('i');
+    if (isEnabled) {
+        icon.className = 'fas fa-volume-up';
+    } else {
+        icon.className = 'fas fa-volume-xmark';
+    }
+});
+
 themeToggleBtn.addEventListener('click', () => {
-const currentTheme = document.body.getAttribute('data-theme');
-if (currentTheme === 'raycast') {
-document.body.removeAttribute('data-theme');
-} else {
-document.body.setAttribute('data-theme', 'raycast');
-}
+    const currentTheme = document.body.getAttribute('data-theme');
+    if (currentTheme === 'raycast') {
+        document.body.removeAttribute('data-theme');
+    } else {
+        document.body.setAttribute('data-theme', 'raycast');
+    }
 });
 
 clearSearchEl.addEventListener('click', () => {
-searchEl.value = '';
-searchEl.focus();
-searchEl.dispatchEvent(new Event('input'));
+    searchEl.value = '';
+    searchEl.focus();
+    searchEl.dispatchEvent(new Event('input'));
 });
 
 function getDomain(url) {
-try {
-return new URL(url).hostname;
-} catch (e) {
-return url;
-}
+    try {
+        return new URL(url).hostname;
+    } catch (e) {
+        return url;
+    }
 }
 
 function fuzzySearch(query, items) {
-if (!query) return items;
-const lowerQuery = query.toLowerCase();
+    if (!query) return items;
+    const lowerQuery = query.toLowerCase();
 
-return items.map(item => {
-const nameLower = item.name.toLowerCase();
-const urlLower = item.url.toLowerCase();
+    return items.map(item => {
+        const nameLower = item.name.toLowerCase();
+        const urlLower = item.url.toLowerCase();
 
-if (nameLower.includes(lowerQuery) || urlLower.includes(lowerQuery)) {
-return { item, score: 2 };
-}
+        if (nameLower.includes(lowerQuery) || urlLower.includes(lowerQuery)) {
+            return { item, score: 2 };
+        }
 
-let qIdx = 0;
-for (let char of nameLower) {
-if (char === lowerQuery[qIdx]) qIdx++;
-if (qIdx === lowerQuery.length) return { item, score: 1 };
-}
+        let qIdx = 0;
+        for (let char of nameLower) {
+            if (char === lowerQuery[qIdx]) qIdx++;
+            if (qIdx === lowerQuery.length) return { item, score: 1 };
+        }
 
-qIdx = 0;
-for (let char of urlLower) {
-if (char === lowerQuery[qIdx]) qIdx++;
-if (qIdx === lowerQuery.length) return { item, score: 1 };
-}
+        qIdx = 0;
+        for (let char of urlLower) {
+            if (char === lowerQuery[qIdx]) qIdx++;
+            if (qIdx === lowerQuery.length) return { item, score: 1 };
+        }
 
-return { item, score: 0 };
-})
-.filter(match => match.score > 0)
-.sort((a, b) => b.score - a.score)
-.map(match => match.item);
+        return { item, score: 0 };
+    })
+    .filter(match => match.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map(match => match.item);
 }
 
 function renderList() {
-itemNodes.forEach(node => node.remove());
-itemNodes =[];
-const empty = listEl.querySelector('.empty-state');
-if(empty) empty.remove();
+    itemNodes.forEach(node => node.remove());
+    itemNodes = [];
+    const empty = listEl.querySelector('.empty-state');
+    if(empty) empty.remove();
 
-if (filteredApps.length === 0) {
-const div = document.createElement('div');
-div.className = 'empty-state';
-div.innerHTML = '<i class="fas fa-ghost"></i><br>No matches found.';
-listEl.appendChild(div);
-pillEl.style.opacity = '0';
-counterEl.textContent = '0';
-loaderEl.classList.add('hidden');
-Object.values(iframePool).forEach(iframe => iframe.classList.remove('active'));
-urlDisplayEl.textContent = '';
-return;
-}
+    if (filteredApps.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'empty-state';
+        div.innerHTML = '<i class="fas fa-ghost"></i><br>No matches found.';
+        listEl.appendChild(div);
+        pillEl.style.opacity = '0';
+        counterEl.textContent = '0';
+        loaderEl.classList.add('hidden');
+        Object.values(iframePool).forEach(iframe => iframe.classList.remove('active'));
+        urlDisplayEl.textContent = '';
+        return;
+    }
 
-counterEl.textContent = filteredApps.length;
-const fragment = document.createDocumentFragment();
+    counterEl.textContent = filteredApps.length;
+    const fragment = document.createDocumentFragment();
 
-filteredApps.forEach((app, index) => {
-const li = document.createElement('div');
-li.className = `app-item ${index === selectedIndex ? 'active' : ''}`;
-li.innerHTML = `
-<div class="icon-wrapper"><i class="fas ${app.icon}"></i></div>
-<div class="name" dir="auto">${app.name}</div>
-`;
+    filteredApps.forEach((app, index) => {
+        const li = document.createElement('div');
+        li.className = `app-item ${index === selectedIndex ? 'active' : ''}`;
+        li.innerHTML = `
+        <div class="icon-wrapper"><i class="fas ${app.icon}"></i></div>
+        <div class="name" dir="auto">${app.name}</div>
+        `;
 
-li.addEventListener('mouseenter', () => {
-if(selectedIndex !== index) {
-selectedIndex = index;
-updateSelection();
-}
-});
+        li.addEventListener('mouseenter', () => {
+            if(selectedIndex !== index) {
+                selectedIndex = index;
+                updateSelection();
+            }
+        });
 
-li.addEventListener('click', () => {
-window.open(app.url, '_blank');
-});
+        li.addEventListener('click', () => {
+            SoundEngine.playClick();
+            window.open(app.url, '_blank');
+        });
 
-fragment.appendChild(li);
-itemNodes.push(li);
-});
+        fragment.appendChild(li);
+        itemNodes.push(li);
+    });
 
-listEl.appendChild(fragment);
-updateSelection();
+    listEl.appendChild(fragment);
+    updateSelection();
 }
 
 function updateSelection() {
-if (filteredApps.length === 0) return;
+    if (filteredApps.length === 0) return;
 
-itemNodes.forEach((node, idx) => {
-node.classList.toggle('active', idx === selectedIndex);
-});
+    if (lastSoundIndex !== selectedIndex) {
+        SoundEngine.playHover();
+        lastSoundIndex = selectedIndex;
+    }
 
-const activeNode = itemNodes[selectedIndex];
-if (activeNode) {
-pillEl.style.opacity = '1';
-pillEl.style.transform = `translateY(${activeNode.offsetTop}px)`;
-activeNode.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-}
+    itemNodes.forEach((node, idx) => {
+        node.classList.toggle('active', idx === selectedIndex);
+    });
 
-if (window.innerWidth > 950) {
-triggerPreview(filteredApps[selectedIndex]);
-}
+    const activeNode = itemNodes[selectedIndex];
+    if (activeNode) {
+        pillEl.style.opacity = '1';
+        pillEl.style.transform = `translateY(${activeNode.offsetTop}px)`;
+        activeNode.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+
+    if (window.innerWidth > 950) {
+        triggerPreview(filteredApps[selectedIndex]);
+    }
 }
 
 function revealIframe(url) {
-if (urlDisplayEl.getAttribute('data-current') === url) {
-loaderEl.classList.add('hidden');
-if (iframePool[url]) {
-iframePool[url].classList.add('active');
-}
-}
+    if (urlDisplayEl.getAttribute('data-current') === url) {
+        loaderEl.classList.add('hidden');
+        if (iframePool[url]) {
+            iframePool[url].classList.add('active');
+        }
+    }
 }
 
 function triggerPreview(app) {
-if (!app) return;
+    if (!app) return;
 
-urlDisplayEl.textContent = app.url;
-urlDisplayEl.setAttribute('data-current', app.url);
-btnLaunchEl.href = app.url;
-loaderLabelEl.textContent = `CONNECTING`;
+    urlDisplayEl.textContent = app.url;
+    urlDisplayEl.setAttribute('data-current', app.url);
+    btnLaunchEl.href = app.url;
+    loaderLabelEl.textContent = `CONNECTING`;
 
-Object.values(iframePool).forEach(iframe => {
-iframe.classList.remove('active');
-});
+    Object.values(iframePool).forEach(iframe => {
+        iframe.classList.remove('active');
+    });
 
-loaderEl.classList.remove('hidden');
+    loaderEl.classList.remove('hidden');
 
-clearTimeout(loadTimer);
-clearTimeout(artificialDelayTimer);
+    clearTimeout(loadTimer);
+    clearTimeout(artificialDelayTimer);
 
-loadTimer = setTimeout(() => {
-const minLoaderTime = new Promise(resolve => {
-artificialDelayTimer = setTimeout(resolve, 350);
-});
+    loadTimer = setTimeout(() => {
+        const minLoaderTime = new Promise(resolve => {
+            artificialDelayTimer = setTimeout(resolve, 350);
+        });
 
-if (!iframePool[app.url]) {
-const iframe = document.createElement('iframe');
-iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
-iframe.loading = "lazy";
-iframe.src = app.url;
+        if (!iframePool[app.url]) {
+            const iframe = document.createElement('iframe');
+            iframe.sandbox = "allow-scripts allow-same-origin allow-forms";
+            iframe.loading = "lazy";
+            iframe.src = app.url;
 
-const loadPromise = new Promise(resolve => {
-iframe.onload = () => {
-iframe.dataset.loaded = "true";
-resolve();
-};
-});
+            const loadPromise = new Promise(resolve => {
+                iframe.onload = () => {
+                    iframe.dataset.loaded = "true";
+                    resolve();
+                };
+            });
 
-frameWrapper.appendChild(iframe);
-iframePool[app.url] = iframe;
+            frameWrapper.appendChild(iframe);
+            iframePool[app.url] = iframe;
 
-Promise.all([loadPromise, minLoaderTime]).then(() => {
-revealIframe(app.url);
-});
+            Promise.all([loadPromise, minLoaderTime]).then(() => {
+                revealIframe(app.url);
+            });
 
-} else if (iframePool[app.url].dataset.loaded === "true") {
-minLoaderTime.then(() => {
-revealIframe(app.url);
-});
-}
-}, 80);
+        } else if (iframePool[app.url].dataset.loaded === "true") {
+            minLoaderTime.then(() => {
+                revealIframe(app.url);
+            });
+        }
+    }, 80);
 }
 
 btnRefreshEl.addEventListener('click', () => {
-if (filteredApps.length > 0 && iframePool[filteredApps[selectedIndex].url]) {
-const currentUrl = filteredApps[selectedIndex].url;
-iframePool[currentUrl].classList.remove('active');
-loaderEl.classList.remove('hidden');
-iframePool[currentUrl].src = iframePool[currentUrl].src;
-}
+    if (filteredApps.length > 0 && iframePool[filteredApps[selectedIndex].url]) {
+        const currentUrl = filteredApps[selectedIndex].url;
+        iframePool[currentUrl].classList.remove('active');
+        loaderEl.classList.remove('hidden');
+        iframePool[currentUrl].src = iframePool[currentUrl].src;
+    }
 });
 
 searchEl.addEventListener('input', (e) => {
-const query = e.target.value;
-clearSearchEl.classList.toggle('visible', query.length > 0);
-filteredApps = fuzzySearch(query, apps);
-selectedIndex = 0;
-renderList();
+    const query = e.target.value;
+    clearSearchEl.classList.toggle('visible', query.length > 0);
+    filteredApps = fuzzySearch(query, apps);
+    selectedIndex = 0;
+    renderList();
 });
 
 document.addEventListener('keydown', (e) => {
-if (e.key === '/' && document.activeElement !== searchEl) {
-e.preventDefault();
-searchEl.focus();
-return;
-}
+    if (e.key === '/' && document.activeElement !== searchEl) {
+        e.preventDefault();
+        searchEl.focus();
+        return;
+    }
 
-if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-e.preventDefault();
-searchEl.focus();
-return;
-}
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchEl.focus();
+        return;
+    }
 
-if ((e.metaKey || e.ctrlKey) && /^[1-8]$/.test(e.key)) {
-const targetApp = apps.find(a => a.key === e.key);
-if(targetApp) {
-e.preventDefault();
-window.open(targetApp.url, '_blank');
-}
-return;
-}
+    if ((e.metaKey || e.ctrlKey) && /^[1-8]$/.test(e.key)) {
+        const targetApp = apps.find(a => a.key === e.key);
+        if(targetApp) {
+            e.preventDefault();
+            SoundEngine.playClick();
+            window.open(targetApp.url, '_blank');
+        }
+        return;
+    }
 
-if (filteredApps.length === 0) return;
+    if (filteredApps.length === 0) return;
 
-switch(e.key) {
-case 'ArrowDown':
-e.preventDefault();
-selectedIndex = (selectedIndex + 1) % filteredApps.length;
-updateSelection();
-break;
-case 'ArrowUp':
-e.preventDefault();
-selectedIndex = (selectedIndex - 1 + filteredApps.length) % filteredApps.length;
-updateSelection();
-break;
-case 'Enter':
-e.preventDefault();
-window.open(filteredApps[selectedIndex].url, '_blank');
-break;
-case 'Escape':
-if (document.activeElement === searchEl) {
-searchEl.blur();
-}
-break;
-}
+    switch(e.key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            selectedIndex = (selectedIndex + 1) % filteredApps.length;
+            updateSelection();
+            break;
+        case 'ArrowUp':
+            e.preventDefault();
+            selectedIndex = (selectedIndex - 1 + filteredApps.length) % filteredApps.length;
+            updateSelection();
+            break;
+        case 'Enter':
+            e.preventDefault();
+            SoundEngine.playClick();
+            window.open(filteredApps[selectedIndex].url, '_blank');
+            break;
+        case 'Escape':
+            if (document.activeElement === searchEl) {
+                searchEl.blur();
+            }
+            break;
+    }
 });
 
 window.addEventListener('resize', () => {
-if (filteredApps.length > 0) {
-const activeNode = itemNodes[selectedIndex];
-if (activeNode) {
-pillEl.style.transition = 'none';
-pillEl.style.transform = `translateY(${activeNode.offsetTop}px)`;
-void pillEl.offsetWidth;
-pillEl.style.transition = 'transform 0.3s var(--ease-out), opacity 0.2s var(--ease), background 0.4s var(--ease), border-color 0.4s var(--ease)';
-}
-}
+    if (filteredApps.length > 0) {
+        const activeNode = itemNodes[selectedIndex];
+        if (activeNode) {
+            pillEl.style.transition = 'none';
+            pillEl.style.transform = `translateY(${activeNode.offsetTop}px)`;
+            void pillEl.offsetWidth;
+            pillEl.style.transition = 'transform 0.3s var(--ease-out), opacity 0.2s var(--ease), background 0.4s var(--ease), border-color 0.4s var(--ease)';
+        }
+    }
 });
 
 renderList();
