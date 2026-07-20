@@ -216,7 +216,7 @@ body::after{
 
 .cached-dot{position:absolute;bottom:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--success);box-shadow:0 0 0 2px var(--surface),0 0 6px rgba(74,222,128,0.7);pointer-events:none;}
 
-.app-item .name{flex:1;font-family:var(--font-ar);font-size:16.5px;font-weight:400;color:var(--text-sec);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.2s var(--ease),font-weight 0.2s var(--ease);letter-spacing:0;}
+.app-item .name{flex:1;font-family:var(--font-ar);font-size:16.5px;font-weight:400;color:var(--text-sec);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.2s var(--ease),font-weight 0.2s var(--ease);letter-spacing:0;text-align:right;direction:rtl;line-height:1;}
 .app-item.active .name{color:var(--text-main);font-weight:600;}
 .app-item .name mark{background:transparent;color:var(--accent);font-weight:600;}
 
@@ -256,7 +256,7 @@ body::after{
 .app-badge .badge-icon{width:32px;height:32px;border-radius:10px;background:var(--icon-bg-active);color:var(--icon-color-active);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;box-shadow:var(--icon-shadow);transition:all 0.35s var(--ease-out);}
 [data-theme="raycast"] .app-badge .badge-icon{background:var(--surface-active);color:var(--text-main);box-shadow:none;}
 .app-badge .badge-text{display:flex;flex-direction:column;gap:1px;min-width:0;}
-.app-badge .badge-name{font-family:var(--font-ar);font-size:14.5px;font-weight:600;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+.app-badge .badge-name{font-family:var(--font-ar);font-size:14.5px;font-weight:600;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;text-align:right;direction:rtl;line-height:1.2;}
 .app-badge .badge-url{font-family:var(--font-mono);font-size:11px;color:var(--text-mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
 
 .url-box{flex:1;height:38px;background:rgba(0,0,0,0.16);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 14px;gap:10px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.25);transition:background 0.5s var(--ease);position:relative;}
@@ -401,7 +401,7 @@ const apps=[
 {name:"فهرس الادوية",url:"https://lx-index.vercel.app/",icon:"bookOpen",key:"8"},
 {name:"حاسبة العائد الاستثماري",url:"https://roi-calculator-eight-omega.vercel.app/",icon:"chartLine",key:"9"},
 {name:"الرقم القومي والتاريخ",url:"https://lx-id.vercel.app/",icon:"idCard",key:"0"},
-{name:"بيان الجهات المتعاقدة",url:"https://entity-tracker-pi.vercel.app/",icon:"building",key:""}
+{name:"بيان الجهات المتعاقدة",url:"https://entity-tracker-pi.vercel.app/",icon:"building",key:"E"}
 ];
 
 const ICONS={
@@ -415,7 +415,7 @@ const ICONS={
   bookOpen:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
   chartLine:'<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>',
   idCard:'<rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6.17 15a3 3 0 0 1 5.66 0"/><path d="M16 10h2"/><path d="M16 14h2"/>',
-  building:'<rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/>',
+  building:'<line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 21 7 3 7"/>',
   bolt:'<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/>',
   volumeHigh:'<path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.59A1.4 1.4 0 0 1 5.42 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.42a1.4 1.4 0 0 1 1 .41l3.38 3.39a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.36 18.36a9 9 0 0 0 0-12.72"/>',
   volumeMute:'<path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.59A1.4 1.4 0 0 1 5.42 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.42a1.4 1.4 0 0 1 1 .41l3.38 3.39a.7.7 0 0 0 1.2-.5z"/><path d="m16.5 10.5 4 4"/><path d="m20.5 10.5-4 4"/>',
@@ -658,7 +658,7 @@ function renderList(){
     li.innerHTML=`
       <div class="icon-wrapper">${iconSvg(app.icon,17,1.5)}${isCached?'<span class="cached-dot" title="Preloaded"></span>':''}</div>
       <div class="name" dir="auto">${highlightMatch(app.name,query)}</div>
-      <div class="kbd-mini">${app.key?'⌘'+app.key:''}</div>
+      ${app.key?`<div class="kbd-mini">⌘${app.key}</div>`:''}
     `;
     li.addEventListener('mouseenter',()=>{if(selectedIndex!==index){selectedIndex=index;updateSelection();}});
     li.addEventListener('click',()=>{SoundEngine.playClick();window.open(app.url,'_blank','noopener');});
@@ -841,8 +841,8 @@ searchEl.addEventListener('input',e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='/'&&document.activeElement!==searchEl){e.preventDefault();searchEl.focus();return;}
   if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();searchEl.focus();searchEl.select();return;}
-  if((e.metaKey||e.ctrlKey)&&/^[0-9]$/.test(e.key)){
-    const targetApp=apps.find(a=>a.key===e.key);
+  if((e.metaKey||e.ctrlKey)&&/^[0-9a-z]$/i.test(e.key)&&e.key.toLowerCase()!=='k'){
+    const targetApp=apps.find(a=>a.key&&a.key.toLowerCase()===e.key.toLowerCase());
     if(targetApp){e.preventDefault();SoundEngine.playClick();window.open(targetApp.url,'_blank','noopener');}
     return;
   }
