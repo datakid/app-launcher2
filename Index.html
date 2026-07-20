@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{
   --bg-void:#07060b;
@@ -126,6 +125,9 @@
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
+.icon-svg{display:block;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s var(--ease),transform 0.2s var(--ease);}
+.icon-svg.filled{fill:currentColor;stroke:none;}
+
 body{
   background-color:var(--bg-void);
   font-family:var(--font-ui);
@@ -184,10 +186,10 @@ body::after{
 .brand-row span{font-family:var(--font-display);font-size:15px;font-weight:500;letter-spacing:0.01em;color:var(--text-sec);font-style:italic;}
 
 .search-box{padding:18px 32px 22px;position:relative;display:flex;align-items:center;}
-.search-box>i.fa-search{position:absolute;left:34px;font-size:19px;color:var(--text-mut);transition:color 0.3s var(--ease),filter 0.3s var(--ease);}
+.search-box>.icon-search{position:absolute;left:34px;color:var(--text-mut);transition:color 0.3s var(--ease),filter 0.3s var(--ease);}
 #search{width:100%;background:transparent;border:none;outline:none;color:var(--text-main);font-family:var(--font-display);font-size:20px;font-weight:400;font-style:italic;padding:0 40px 0 44px;height:34px;letter-spacing:-0.01em;}
 #search::placeholder{color:var(--text-mut);font-weight:400;font-style:italic;font-size:20px;}
-.search-box:focus-within>i.fa-search{color:var(--accent);filter:drop-shadow(0 0 10px var(--accent-glow));}
+.search-box:focus-within>.icon-search{color:var(--accent);filter:drop-shadow(0 0 10px var(--accent-glow));}
 
 .clear-search{position:absolute;right:32px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--text-mut);cursor:pointer;opacity:0;pointer-events:none;transition:all 0.2s var(--ease);border-radius:50%;background:var(--surface-hover);font-size:12px;}
 .clear-search.visible{opacity:1;pointer-events:auto;}
@@ -222,7 +224,7 @@ body::after{
 .app-item.active .kbd-mini{opacity:0.7;}
 
 .empty-state{text-align:center;padding:110px 20px;font-family:var(--font-ui);font-size:14px;color:var(--text-mut);}
-.empty-state i{font-size:34px;margin-bottom:18px;opacity:0.25;}
+.empty-state svg{margin:0 auto 18px;opacity:0.25;}
 
 .footer{padding:16px 32px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:13px;background:var(--sidebar-bg);transition:background 0.5s var(--ease),border-color 0.5s var(--ease);}
 .footer-row{display:flex;justify-content:space-between;align-items:center;}
@@ -320,15 +322,15 @@ iframe.active{opacity:1;transform:scale(1) translateY(0);pointer-events:auto;z-i
 
 <div class="launcher">
 <div class="sidebar">
-  <div class="brand-row"><div class="mark"><i class="fa-solid fa-bolt"></i></div><span>LinkExpress</span></div>
+  <div class="brand-row"><div class="mark"><svg class="icon-svg filled" width="12" height="12" viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></svg></div><span>LinkExpress</span></div>
   <div class="search-box">
-    <i class="fas fa-search"></i>
+    <svg class="icon-svg icon-search" width="18" height="18" viewBox="0 0 24 24" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search" placeholder="Search apps..." autocomplete="off" spellcheck="false" autofocus role="combobox" aria-expanded="true" aria-controls="list" aria-autocomplete="list" aria-label="Search applications">
-    <div class="clear-search" id="clear-search" role="button" tabindex="0" aria-label="Clear search"><i class="fas fa-times"></i></div>
+    <div class="clear-search" id="clear-search" role="button" tabindex="0" aria-label="Clear search"><svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></div>
   </div>
   <div class="list-header">
     <span>Applications</span>
-    <span id="counter" aria-live="polite">10</span>
+    <span id="counter" aria-live="polite">11</span>
   </div>
 
   <div class="scroll-area">
@@ -339,11 +341,11 @@ iframe.active{opacity:1;transform:scale(1) translateY(0);pointer-events:auto;z-i
 
   <div class="footer">
     <div class="footer-row">
-      <div class="logo"><i class="fa-solid fa-bolt"></i>LINKEXPRESS</div>
+      <div class="logo"><svg class="icon-svg filled" width="12" height="12" viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></svg>LINKEXPRESS</div>
       <div class="footer-controls">
-        <button id="sound-toggle" class="icon-btn" title="Toggle Sound" aria-pressed="false"><i class="fas fa-volume-xmark"></i></button>
-        <button id="mode-toggle" class="icon-btn" title="Toggle Light/Dark" aria-pressed="false"><i class="fas fa-moon"></i></button>
-        <button id="theme-toggle" class="icon-btn" title="Toggle Style" aria-pressed="false"><i class="fas fa-palette"></i></button>
+        <button id="sound-toggle" class="icon-btn" title="Toggle Sound" aria-pressed="false"></button>
+        <button id="mode-toggle" class="icon-btn" title="Toggle Light/Dark" aria-pressed="false"></button>
+        <button id="theme-toggle" class="icon-btn" title="Toggle Style" aria-pressed="false"><svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24" stroke-width="1.7"><path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".6" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".6" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".6" fill="currentColor" stroke="none"/></svg></button>
       </div>
     </div>
     <div class="hint-row">
@@ -358,19 +360,19 @@ iframe.active{opacity:1;transform:scale(1) translateY(0);pointer-events:auto;z-i
   <div class="topbar">
     <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
     <div class="app-badge">
-      <div class="badge-icon" id="badge-icon"><i class="fas fa-bolt"></i></div>
+      <div class="badge-icon" id="badge-icon"><svg class="icon-svg filled" width="14" height="14" viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/></svg></div>
       <div class="badge-text">
         <div class="badge-name" id="badge-name" dir="auto">—</div>
         <div class="badge-url" id="badge-url">about:blank</div>
       </div>
     </div>
     <div class="url-box">
-      <i class="fas fa-lock"></i>
+      <svg class="icon-svg" width="11" height="11" viewBox="0 0 24 24" stroke-width="1.8"><rect width="16" height="11" x="4" y="11" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       <span class="url-text" id="url-display">about:blank</span>
     </div>
-    <button class="btn-action" id="btn-copy" title="Copy Link"><i class="fas fa-link"></i></button>
-    <button class="btn-action" id="btn-refresh" title="Reload"><i class="fas fa-redo-alt"></i></button>
-    <a href="#" target="_blank" rel="noopener" class="btn-action primary" id="btn-launch" title="Open Externally">Open <i class="fas fa-arrow-right" style="font-size:11px;"></i></a>
+    <button class="btn-action" id="btn-copy" title="Copy Link"><svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24" stroke-width="1.8"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg></button>
+    <button class="btn-action" id="btn-refresh" title="Reload"><svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg></button>
+    <a href="#" target="_blank" rel="noopener" class="btn-action primary" id="btn-launch" title="Open Externally">Open <svg class="icon-svg" width="12" height="12" viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
   </div>
 
   <div class="frame-wrapper" id="frame-wrapper">
@@ -379,8 +381,8 @@ iframe.active{opacity:1;transform:scale(1) translateY(0);pointer-events:auto;z-i
       <div class="pulse-ring"></div>
       <div class="loader-label" id="loader-label">CONNECTING</div>
       <div class="loader-fallback" id="loader-fallback">
-        <button id="loader-open" class="primary"><i class="fas fa-arrow-up-right-from-square"></i>Open in new tab</button>
-        <button id="loader-retry"><i class="fas fa-rotate-right"></i>Retry</button>
+        <button id="loader-open" class="primary"><svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24" stroke-width="1.8"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>Open in new tab</button>
+        <button id="loader-retry"><svg class="icon-svg" width="13" height="13" viewBox="0 0 24 24" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Retry</button>
       </div>
     </div>
   </div>
@@ -389,17 +391,46 @@ iframe.active{opacity:1;transform:scale(1) translateY(0);pointer-events:auto;z-i
 
 <script>
 const apps=[
-{name:"خارجي 1",url:"https://datakid-github-io.vercel.app/",icon:"fa-briefcase-medical",key:"1"},
-{name:"خارجي 3",url:"https://datakid2.vercel.app/",icon:"fa-graduation-cap",key:"2"},
-{name:"مجموعات دوائية",url:"https://desktop-ru4x.vercel.app/",icon:"fa-pills",key:"3"},
-{name:"لستة الادوية",url:"https://searchbar-five-beta.vercel.app/",icon:"fa-search",key:"4"},
-{name:"المنفذ والتحمل",url:"https://newlist2.vercel.app/",icon:"fa-dollar-sign",key:"5"},
-{name:"بروتوكولات التأمين",url:"https://protocols-one.vercel.app/",icon:"fa-folder-open",key:"6"},
-{name:"بيانات الخارجي",url:"https://simpledashboard21.netlify.app/",icon:"fa-eye",key:"7"},
-{name:"فهرس الادوية",url:"https://lx-index.vercel.app/",icon:"fa-book-open",key:"8"},
-{name:"حاسبة العائد الاستثماري",url:"https://roi-calculator-eight-omega.vercel.app/",icon:"fa-chart-line",key:"9"},
-{name:"الرقم القومي والتاريخ",url:"https://lx-id.vercel.app/",icon:"fa-id-card",key:"0"}
+{name:"خارجي 1",url:"https://datakid-github-io.vercel.app/",icon:"briefcase",key:"1"},
+{name:"خارجي 3",url:"https://datakid2.vercel.app/",icon:"graduationCap",key:"2"},
+{name:"مجموعات دوائية",url:"https://desktop-ru4x.vercel.app/",icon:"pills",key:"3"},
+{name:"لستة الادوية",url:"https://searchbar-five-beta.vercel.app/",icon:"search",key:"4"},
+{name:"المنفذ والتحمل",url:"https://newlist2.vercel.app/",icon:"dollar",key:"5"},
+{name:"بروتوكولات التأمين",url:"https://protocols-one.vercel.app/",icon:"folderOpen",key:"6"},
+{name:"بيانات الخارجي",url:"https://simpledashboard21.netlify.app/",icon:"eye",key:"7"},
+{name:"فهرس الادوية",url:"https://lx-index.vercel.app/",icon:"bookOpen",key:"8"},
+{name:"حاسبة العائد الاستثماري",url:"https://roi-calculator-eight-omega.vercel.app/",icon:"chartLine",key:"9"},
+{name:"الرقم القومي والتاريخ",url:"https://lx-id.vercel.app/",icon:"idCard",key:"0"},
+{name:"بيان الجهات المتعاقدة",url:"https://entity-tracker-pi.vercel.app/",icon:"building",key:""}
 ];
+
+const ICONS={
+  briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><path d="M10 13h4"/>',
+  graduationCap:'<path d="M21.42 10.92a1 1 0 0 0-.02-1.84L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+  pills:'<path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/>',
+  dollar:'<line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+  folderOpen:'<path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>',
+  eye:'<path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/>',
+  bookOpen:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  chartLine:'<path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>',
+  idCard:'<rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6.17 15a3 3 0 0 1 5.66 0"/><path d="M16 10h2"/><path d="M16 14h2"/>',
+  building:'<rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/>',
+  bolt:'<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/>',
+  volumeHigh:'<path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.59A1.4 1.4 0 0 1 5.42 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.42a1.4 1.4 0 0 1 1 .41l3.38 3.39a.7.7 0 0 0 1.2-.5z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.36 18.36a9 9 0 0 0 0-12.72"/>',
+  volumeMute:'<path d="M11 4.7a.7.7 0 0 0-1.2-.5L6.4 7.59A1.4 1.4 0 0 1 5.42 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.42a1.4 1.4 0 0 1 1 .41l3.38 3.39a.7.7 0 0 0 1.2-.5z"/><path d="m16.5 10.5 4 4"/><path d="m20.5 10.5-4 4"/>',
+  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+  link:'<path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  ghost:'<path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/>'
+};
+const ICON_FILLED=new Set(['bolt']);
+function iconSvg(key,size=16,sw=1.6){
+  const paths=ICONS[key]||'';
+  const filled=ICON_FILLED.has(key);
+  return `<svg class="icon-svg${filled?' filled':''}" width="${size}" height="${size}" viewBox="0 0 24 24"${filled?'':` stroke-width="${sw}"`}>${paths}</svg>`;
+}
 
 const STORAGE_KEY='linkexpress-prefs';
 
@@ -508,11 +539,12 @@ document.body.setAttribute('data-theme',initialTheme);
 document.body.setAttribute('data-mode',initialMode);
 themeToggleBtn.setAttribute('aria-pressed',String(initialTheme==='raycast'));
 modeToggleBtn.setAttribute('aria-pressed',String(initialMode==='light'));
-modeToggleBtn.querySelector('i').className=initialMode==='light'?'fas fa-sun':'fas fa-moon';
+modeToggleBtn.innerHTML=iconSvg(initialMode==='light'?'sun':'moon',13,1.7);
+soundToggleBtn.innerHTML=iconSvg('volumeMute',13,1.7);
 
 if(prefs.sound){
   SoundEngine.enabled=true;
-  soundToggleBtn.querySelector('i').className='fas fa-volume-high';
+  soundToggleBtn.innerHTML=iconSvg('volumeHigh',13,1.7);
   soundToggleBtn.setAttribute('aria-pressed','true');
   const initSoundOnce=()=>{SoundEngine.init();document.removeEventListener('pointerdown',initSoundOnce);document.removeEventListener('keydown',initSoundOnce);};
   document.addEventListener('pointerdown',initSoundOnce,{once:true});
@@ -527,7 +559,7 @@ clearSearchEl.addEventListener('mousedown',()=>{if(clearSearchEl.classList.conta
 
 soundToggleBtn.addEventListener('click',()=>{
   const isEnabled=SoundEngine.toggle();
-  soundToggleBtn.querySelector('i').className=isEnabled?'fas fa-volume-high':'fas fa-volume-xmark';
+  soundToggleBtn.innerHTML=iconSvg(isEnabled?'volumeHigh':'volumeMute',13,1.7);
   soundToggleBtn.setAttribute('aria-pressed',String(isEnabled));
   savePrefs();
 });
@@ -535,7 +567,7 @@ soundToggleBtn.addEventListener('click',()=>{
 modeToggleBtn.addEventListener('click',()=>{
   const isLight=document.body.getAttribute('data-mode')==='light';
   document.body.setAttribute('data-mode',isLight?'dark':'light');
-  modeToggleBtn.querySelector('i').className=isLight?'fas fa-moon':'fas fa-sun';
+  modeToggleBtn.innerHTML=iconSvg(isLight?'moon':'sun',13,1.7);
   modeToggleBtn.setAttribute('aria-pressed',String(!isLight));
   savePrefs();
 });
@@ -589,7 +621,7 @@ function renderList(){
     const div=document.createElement('div');
     div.className='empty-state';
     div.setAttribute('role','status');
-    div.innerHTML='<i class="fas fa-ghost"></i><br>No matches found.';
+    div.innerHTML=`${iconSvg('ghost',34,1.4)}<br>No matches found.`;
     listEl.appendChild(div);
     pillEl.style.opacity='0';
     counterEl.textContent='0';
@@ -624,9 +656,9 @@ function renderList(){
     }
     const isCached=iframePool.has(app.url)&&iframePool.get(app.url).dataset.loaded==='true';
     li.innerHTML=`
-      <div class="icon-wrapper"><i class="fas ${app.icon}"></i>${isCached?'<span class="cached-dot" title="Preloaded"></span>':''}</div>
+      <div class="icon-wrapper">${iconSvg(app.icon,17,1.5)}${isCached?'<span class="cached-dot" title="Preloaded"></span>':''}</div>
       <div class="name" dir="auto">${highlightMatch(app.name,query)}</div>
-      <div class="kbd-mini">⌘${app.key}</div>
+      <div class="kbd-mini">${app.key?'⌘'+app.key:''}</div>
     `;
     li.addEventListener('mouseenter',()=>{if(selectedIndex!==index){selectedIndex=index;updateSelection();}});
     li.addEventListener('click',()=>{SoundEngine.playClick();window.open(app.url,'_blank','noopener');});
@@ -686,7 +718,6 @@ function revealIframe(url){
   }
 }
 
-// Fallback when frame load is delayed
 function showLoaderFallback(){
   loaderLabelEl.textContent='TAKING LONGER THAN USUAL';
   loaderFallbackEl.classList.add('visible');
@@ -698,7 +729,7 @@ function updatePreviewMeta(app){
   btnLaunchEl.href=app.url;
   badgeNameEl.textContent=app.name;
   badgeUrlEl.textContent=app.url.replace(/^https?:\/\//,'');
-  badgeIconEl.innerHTML=`<i class="fas ${app.icon}"></i>`;
+  badgeIconEl.innerHTML=iconSvg(app.icon,15,1.5);
 }
 
 function triggerPreview(app){
@@ -784,10 +815,9 @@ btnCopyEl.addEventListener('click',()=>{
   if(filteredApps.length===0)return;
   const url=filteredApps[selectedIndex].url;
   const showCopied=()=>{
-    const icon=btnCopyEl.querySelector('i');
     btnCopyEl.classList.add('copied');
-    icon.className='fas fa-check';
-    setTimeout(()=>{btnCopyEl.classList.remove('copied');icon.className='fas fa-link';},1200);
+    btnCopyEl.innerHTML=iconSvg('check',13,1.8);
+    setTimeout(()=>{btnCopyEl.classList.remove('copied');btnCopyEl.innerHTML=iconSvg('link',13,1.8);},1200);
   };
   if(navigator.clipboard&&window.isSecureContext){
     navigator.clipboard.writeText(url).then(showCopied).catch(()=>fallbackCopy(url,showCopied));
