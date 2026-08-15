@@ -147,6 +147,7 @@ body{
   justify-content:center;
   overflow:hidden;
   position:relative;
+  container-type:inline-size;container-name:launcher;
   transition:background-color var(--d-4) var(--ease);
 }
 
@@ -178,7 +179,6 @@ body::after{
   border-radius:var(--r-5);
   box-shadow:var(--shadow-launcher);
   display:flex;overflow:hidden;
-  container-type:inline-size;container-name:launcher;
   transform:scale(0.96) translateY(20px);opacity:0;
   animation:boot 0.65s var(--ease-spring) forwards;
   transition:background var(--d-4) var(--ease),border-color var(--d-4) var(--ease),box-shadow var(--d-4) var(--ease);
