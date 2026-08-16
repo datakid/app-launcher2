@@ -245,7 +245,7 @@ body::after{
 
 .app-list{list-style:none;position:relative;display:flex;flex-direction:column;gap:3px;}
 
-.group-header{order:0;position:sticky;top:0;z-index:2;padding:10px 10px 6px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);background:linear-gradient(var(--bg) 0%, var(--bg) 78%, transparent 100%);backdrop-filter:none;}
+.group-header{position:sticky;top:0;z-index:2;padding:10px 10px 6px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);background:linear-gradient(var(--bg) 0%, var(--bg) 78%, transparent 100%);backdrop-filter:none;contain:layout style;}
 .group-header.hidden{display:none;}
 
 .active-pill{position:absolute;inset-inline:0;height:var(--item-h);border-radius:var(--r-3);pointer-events:none;z-index:0;opacity:0;
@@ -1057,7 +1057,6 @@ function applyPlan(plan){
   const sameVisibleSet = sig === lastPlanSig;
   lastPlanSig = sig;
 
-  let order = 0;
   let visibleIndex = 0;
   const usedHeaders = new Set();
   const usedApps = new Set();
@@ -1066,12 +1065,12 @@ function applyPlan(plan){
   for (const item of plan.items){
     if (item.type === 'header'){
       const node = headerNodes.get(item.key);
-      node.style.order = String(order++);
+      listEl.appendChild(node);
       node.classList.remove('hidden');
       usedHeaders.add(item.key);
     } else if (item.type === 'app'){
       const node = appNodes.get(item.entry.app.id);
-      node.style.order = String(order++);
+      listEl.appendChild(node);
       if (sameVisibleSet){
         node.classList.add('no-anim');
       } else {
@@ -1084,7 +1083,7 @@ function applyPlan(plan){
       visibleIndex++;
     } else {
       const node = commandNodes.get(item.cmd.id);
-      node.style.order = String(order++);
+      listEl.appendChild(node);
       if (sameVisibleSet){
         node.classList.add('no-anim');
       } else {
