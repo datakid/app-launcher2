@@ -17,6 +17,7 @@
 
 :root{
   --item-h:64px;
+  --header-h:28px;
   --h:293;
   --h2:55;
 
@@ -162,7 +163,7 @@ body{
 .blob-wrap.secondary .blob{
   background:radial-gradient(closest-side, var(--blob-b) 0%, color-mix(in oklab, var(--blob-b), transparent 60%) 45%, transparent 72%);
 }
-body.tab-hidden .blob-wrap{animation-play-state:paused;}
+body.tab-hidden .blob-wrap,body.is-scrolling .blob-wrap,body.blobs-idle .blob-wrap{animation-play-state:paused;}
 [data-perf="low"] .blob-wrap{animation:none;}
 
 @keyframes drift{0%{transform:translate3d(0,0,0);}100%{transform:translate3d(120px,90px,0);}}
@@ -170,7 +171,7 @@ body.tab-hidden .blob-wrap{animation-play-state:paused;}
 body::after{
   content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity:var(--noise-op);mix-blend-mode:overlay;transition:opacity var(--d-3) var(--ease);
+  opacity:var(--noise-op);transition:opacity var(--d-3) var(--ease);
 }
 
 .launcher{
@@ -191,8 +192,8 @@ body::after{
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
   border-radius:inherit;
   background:var(--glass);
-  backdrop-filter:blur(28px) saturate(160%);
-  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
   transition:background var(--d-4) var(--ease);
 }
 [data-perf="low"] .launcher::before{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--surface-1);}
@@ -235,17 +236,18 @@ body::after{
 .list-header{padding:0 28px 12px;font-family:var(--font-mono);font-size:10.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.16em;display:flex;justify-content:space-between;align-items:center;font-weight:500;}
 .list-header span:last-child{font-variant-numeric:tabular-nums;}
 
-.scroll-area{flex:1;overflow-y:auto;padding:0 18px 18px;position:relative;contain:layout style;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--scrollbar-thumb) transparent;}
-[data-perf="high"] .scroll-area{
-  mask-image:linear-gradient(to bottom, transparent 0, #000 16px, #000 calc(100% - 24px), transparent 100%);
-}
+.scroll-wrap{flex:1;min-height:0;position:relative;}
+.scroll-area{position:absolute;inset:0;overflow-y:auto;padding:0 18px 18px;contain:layout style;overscroll-behavior:contain;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:var(--scrollbar-thumb) transparent;}
+[data-perf="high"] .scroll-wrap::before,[data-perf="high"] .scroll-wrap::after{content:'';position:absolute;inset-inline:0;height:24px;pointer-events:none;z-index:3;}
+[data-perf="high"] .scroll-wrap::before{top:0;background:linear-gradient(color-mix(in oklab, var(--bg), transparent 15%), transparent);}
+[data-perf="high"] .scroll-wrap::after{bottom:0;background:linear-gradient(transparent, color-mix(in oklab, var(--bg), transparent 15%));}
 .scroll-area::-webkit-scrollbar{width:6px;}
 .scroll-area::-webkit-scrollbar-track{background:transparent;}
 .scroll-area::-webkit-scrollbar-thumb{background:var(--scrollbar-thumb);border-radius:10px;}
 
 .app-list{list-style:none;position:relative;display:flex;flex-direction:column;gap:3px;}
 
-.group-header{position:sticky;top:0;z-index:2;padding:10px 10px 6px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);background:linear-gradient(var(--bg) 0%, var(--bg) 78%, transparent 100%);backdrop-filter:none;contain:layout style;}
+.group-header{position:sticky;top:0;z-index:2;height:var(--header-h);line-height:calc(var(--header-h) - 16px);padding:10px 10px 6px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--text-3);background:linear-gradient(var(--bg) 0%, var(--bg) 78%, transparent 100%);backdrop-filter:none;contain:layout style;}
 .group-header.hidden{display:none;}
 
 .active-pill{position:absolute;inset-inline:0;height:var(--item-h);border-radius:var(--r-3);pointer-events:none;z-index:0;opacity:0;
@@ -370,8 +372,8 @@ body.tab-hidden .pulse-ring::before{animation-play-state:paused;}
 .blocked-actions button.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:var(--icon-active-fg);border:none;}
 [data-theme="raycast"] .blocked-actions button.primary{background:var(--text);color:var(--bg);}
 
-.frame-slot{position:absolute;inset:0;overflow:hidden;opacity:0;transform:translate3d(0,6px,0);transition:opacity var(--d-3) var(--ease),transform var(--d-3) var(--ease-out);pointer-events:none;z-index:5;}
-.frame-slot.active{opacity:1;transform:translate3d(0,0,0);pointer-events:auto;z-index:10;}
+.frame-slot{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;transform:translate3d(0,6px,0);transition:opacity var(--d-3) var(--ease),transform var(--d-3) var(--ease-out),visibility 0s linear var(--d-3);pointer-events:none;z-index:5;}
+.frame-slot.active{opacity:1;visibility:visible;transform:translate3d(0,0,0);pointer-events:auto;z-index:10;transition:opacity var(--d-3) var(--ease),transform var(--d-3) var(--ease-out),visibility 0s linear 0s;}
 .frame-slot iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;background:#fff;transform-origin:0 0;}
 
 .help-overlay{position:fixed;inset:0;z-index:100;width:100%;height:100%;margin:0;border:none;padding:0;background:transparent;color:inherit;display:none;align-items:center;justify-content:center;}
@@ -458,9 +460,11 @@ body.tab-hidden .pulse-ring::before{animation-play-state:paused;}
       <span id="counter" aria-live="polite">15</span>
     </div>
 
-    <div class="scroll-area" id="scroll-area">
-      <div class="app-list" id="list" role="listbox" aria-label="Applications">
-        <div class="active-pill" id="pill"></div>
+    <div class="scroll-wrap">
+      <div class="scroll-area" id="scroll-area">
+        <div class="app-list" id="list" role="listbox" aria-label="Applications">
+          <div class="active-pill" id="pill"></div>
+        </div>
       </div>
     </div>
 
@@ -819,6 +823,11 @@ function recordVisit(id){
   savePrefs();
 }
 
+function readPx(varName, fallback){
+  const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue(varName));
+  return Number.isFinite(v) ? v : fallback;
+}
+
 function detectLowEnd(){
   return (navigator.hardwareConcurrency ?? 8) <= 4
     || (navigator.deviceMemory ?? 8) <= 4
@@ -859,7 +868,23 @@ const commandNodes = new Map();
 const railButtons = new Map();
 const selKeyToIndex = new Map();
 let currentSelectable = [];
+let currentPlanItems = [];
 let currentPlanMode = 'app';
+let ITEM_H = readPx('--item-h', 64);
+let HEADER_H = readPx('--header-h', 28);
+const ROW_GAP = 3;
+
+function assignOffsets(items){
+  let y = 0;
+  for (const item of items){
+    if (item.type === 'header'){
+      y += HEADER_H + ROW_GAP;
+    } else {
+      item.top = y;
+      y += ITEM_H + ROW_GAP;
+    }
+  }
+}
 let lastSelectedKey = null;
 let lastPlanSig = null;
 let lastSoundIndex = -1;
@@ -1050,8 +1075,10 @@ function setActiveNode(node){
 function applyPlan(plan){
   currentPlanMode = plan.mode;
   currentSelectable = plan.items.filter(i => i.type !== 'header');
+  currentPlanItems = plan.items;
   selKeyToIndex.clear();
   currentSelectable.forEach((item, idx) => selKeyToIndex.set(keyForItem(item), idx));
+  assignOffsets(plan.items);
 
   const sig = plan.items.map(keyForItem).slice().sort().join('|');
   const sameVisibleSet = sig === lastPlanSig;
@@ -1118,16 +1145,15 @@ function renderList(){
 }
 
 let pillY = null;
-function movePill(node){
-  const y = node.offsetTop;
+function movePill(top){
   if (pillY === null) pillEl.style.transition = 'none';
-  pillEl.style.transform = `translate3d(0,${y}px,0)`;
+  pillEl.style.transform = `translate3d(0,${top}px,0)`;
   pillEl.style.opacity = '1';
   if (pillY === null) requestAnimationFrame(() => { pillEl.style.transition = ''; });
-  pillY = y;
+  pillY = top;
 }
 
-function updateSelectionVisual(){
+function updateSelectionVisual(skipScrollIntoView){
   if (currentSelectable.length === 0){
     pillEl.style.opacity = '0';
     searchEl.removeAttribute('aria-activedescendant');
@@ -1141,8 +1167,8 @@ function updateSelectionVisual(){
   searchEl.setAttribute('aria-activedescendant', activeNode.id);
 
   requestAnimationFrame(() => {
-    movePill(activeNode);
-    activeNode.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    movePill(activeItem.top);
+    if (!skipScrollIntoView) activeNode.scrollIntoView({ block: 'nearest', behavior: 'auto' });
   });
 
   if (lastSoundIndex !== state.selection){ SoundEngine.playHover(); lastSoundIndex = state.selection; }
@@ -1207,7 +1233,7 @@ function scheduleIdlePrefetch(){
 }
 
 const iframePool = new Map();
-const MAX_CACHED_FRAMES = 5;
+const MAX_CACHED_FRAMES = 2;
 const FRAME_TIMEOUT_MS = 6500;
 let artificialDelayTimer = null;
 
@@ -1287,15 +1313,25 @@ function revealIframe(url){
 }
 
 let badgeIconToken = 0;
+const badgeIconCache = new Map();
 function setBadgeIcon(app){
   const token = ++badgeIconToken;
+  const cached = badgeIconCache.get(app.id);
+  if (cached){
+    badgeIconEl.innerHTML = '';
+    badgeIconEl.appendChild(cached);
+    return;
+  }
   badgeIconEl.innerHTML = iconSvg(app.icon, 15, 1.5);
   let favUrl = null;
   try { favUrl = `https://www.google.com/s2/favicons?domain=${new URL(app.url).hostname}&sz=64`; } catch (e) {}
   if (favUrl){
     const img = document.createElement('img');
     img.alt = '';
-    img.onload = () => { if (token === badgeIconToken){ badgeIconEl.innerHTML = ''; badgeIconEl.appendChild(img); } };
+    img.onload = () => {
+      badgeIconCache.set(app.id, img);
+      if (token === badgeIconToken){ badgeIconEl.innerHTML = ''; badgeIconEl.appendChild(img); }
+    };
     img.src = favUrl;
   }
 }
@@ -1483,14 +1519,28 @@ scrollAreaEl.addEventListener('scroll', () => {
     isScrolling = true;
     listEl.style.pointerEvents = 'none';
     scrollAreaEl.dataset.scrolling = '1';
+    document.body.classList.add('is-scrolling');
   }
   clearTimeout(scrollIdleTimer);
   scrollIdleTimer = setTimeout(() => {
     isScrolling = false;
     listEl.style.pointerEvents = '';
     delete scrollAreaEl.dataset.scrolling;
+    document.body.classList.remove('is-scrolling');
   }, 140);
 }, { passive:true });
+
+let blobIdleTimer = null, lastBlobActivity = 0;
+function markBlobActivity(){
+  const now = performance.now();
+  if (now - lastBlobActivity < 1000) return;
+  lastBlobActivity = now;
+  document.body.classList.remove('blobs-idle');
+  clearTimeout(blobIdleTimer);
+  blobIdleTimer = setTimeout(() => document.body.classList.add('blobs-idle'), 6000);
+}
+['pointermove', 'pointerdown', 'keydown', 'wheel'].forEach(evt => document.addEventListener(evt, markBlobActivity, { passive:true }));
+markBlobActivity();
 
 let lastPx = -1, lastPy = -1;
 listEl.addEventListener('pointermove', e => {
@@ -1502,7 +1552,7 @@ listEl.addEventListener('pointermove', e => {
   const idx = selKeyToIndex.get(node.dataset.selKey);
   if (idx === undefined || idx === state.selection) return;
   state.selection = idx;
-  updateSelectionVisual();
+  updateSelectionVisual(true);
 }, { passive:true });
 
 listEl.addEventListener('pointerdown', e => {
@@ -1631,9 +1681,38 @@ document.addEventListener('keydown', e => {
 
 document.addEventListener('visibilitychange', () => { document.body.classList.toggle('tab-hidden', document.hidden); });
 
+(function monitorFrameHealth(){
+  let lastT = performance.now();
+  let longFrameStreak = 0;
+  function tick(t){
+    if (document.documentElement.dataset.perf === 'low' || document.hidden){
+      lastT = t;
+      longFrameStreak = 0;
+      requestAnimationFrame(tick);
+      return;
+    }
+    const dt = t - lastT;
+    lastT = t;
+    if (dt > 50){
+      longFrameStreak++;
+      if (longFrameStreak >= 12){
+        applyPerf(true);
+        savePrefs();
+      }
+    } else {
+      longFrameStreak = 0;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
 window.addEventListener('resize', debounce(() => {
+  ITEM_H = readPx('--item-h', ITEM_H);
+  HEADER_H = readPx('--header-h', HEADER_H);
+  assignOffsets(currentPlanItems);
   const item = currentSelectable[state.selection];
-  if (item) movePill(nodeForItem(item));
+  if (item) movePill(item.top);
   const activeBtn = railButtons.get(state.activeCat);
   if (activeBtn) moveRailIndicator(activeBtn);
 }, 120));
